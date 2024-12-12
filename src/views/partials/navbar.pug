@@ -8,7 +8,7 @@ header
         ul.navbar-nav.me-auto
           li.nav-item
             a.nav-link.medico-link(aria-current="page", href="/") Home
-          if(usuario.rol === "Paciente" || usuario.rol === "Secretario")
+          if(usuario.rol === "Médico" ||  usuario.rol === "Paciente" || usuario.rol === "Secretario")
             li.nav-item
               a.nav-link.medico-link(aria-current="page", href="/turno/darturno") Turno
           if(usuario.rol === "Médico" || usuario.rol === "Administrador")
