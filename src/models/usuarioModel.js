@@ -33,7 +33,7 @@ export const obtenerTodosLosUsuarios = async () =>{
             SELECT u.id_usuario, u.dni, u.id_rol, u.estado_usuario , p.*,r.*
             FROM usuario u 
             JOIN persona p ON u.dni = p.dni
-            JOIN rol r ON u.id_rol = u.id_rol
+            JOIN rol r ON u.id_rol = r.id_rol
             `
         const [resultado] = await connection.execute(consulta)
         return resultado

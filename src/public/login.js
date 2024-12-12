@@ -11,10 +11,10 @@ async function iniciarSesion(){
     const mensaje = document.getElementById("mensaje")
     switch (response.status) {
         case 401: 
-            mensaje.innerHTML="Datos Incorrectos"
+            mensaje.innerHTML="*Datos Incorrectos"
             break;
         case 500: 
-            mensaje.innerHTML="Error inesperado"
+            mensaje.innerHTML="*Error inesperado"
             break;
         default:
             break;

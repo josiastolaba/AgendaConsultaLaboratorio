@@ -25,6 +25,7 @@ block content
                                 th Hora Fin
                                 th Fecha 
                                 th Estado
+                                th Motivo
                                 th DNI
                                 th
                                 th Confirmar 
@@ -37,6 +38,7 @@ block content
                                         td #{turno.fin_turno}
                                         td #{fecha}
                                         td #{turno.estado_turno}
+                                        td #{turno.motivo_consulta}
                                         if turno.dni 
                                           td #{turno.dni}
                                         else 
@@ -45,17 +47,20 @@ block content
                                           td 
                                               button.btn.btn-primary.select(type="button" onclick=`seleccionarTurno(this,${turno.id_turno})`) Seleccionar
                                           td 
+                                              button.btn.btn-secondary.w-100(type="submit" disabled) Confirmar
                                           td 
+                                              button.btn.btn-secondary.w-100(type="submit" disabled) Cancelar
                                         else if(turno.id_estado_turno == 2)
-                                          td 
+                                          td
+                                              button.btn.btn-secondary.w-100(type="button" disabled) Reservado 
                                           td 
                                             form(action="/turno/confirmar" method="POST" novalidate)
                                               input(name="id_turno" type="hidden" value=turno.id_turno)
-                                              button.btn.btn-success(type="submit") Confirmar
+                                              button.btn.btn-success.w-100(type="submit") Confirmar
                                           td 
                                             form(action="/turno/cancelar" method="POST" novalidate)
                                               input(name="id_turno" type="hidden" value=turno.id_turno)
-                                              button.btn.btn-danger(type="submit") Cancelar
+                                              button.btn.btn-danger.w-100(type="submit") Cancelar
                                         else 
                                           td 
                                           td 
@@ -76,7 +81,7 @@ block content
                     .invalid-feedback Es obligatorio seleccionar un paciente.
                 input#id_turno(name="id_turno" type="hidden" value="")
                 button.btn.btn-primary(type="submit") Guardar
-                button.btn.btn-secondary(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal") Registrar Paciente
+                button.btn.btn-dark(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal") Registrar Paciente
     .modal.fade#exampleModal(tabindex="-1", aria-labelledby="exampleModalLabel", aria-hidden="true" )
       .modal-dialog.modal-dialog-scrollable(style="height: 90vh")
         .modal-content

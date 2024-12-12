@@ -19,8 +19,6 @@ html(lang="en")
               .card-body 
                   h1.text-center Iniciar Sesión
                   form.allforms(class="needs-validation" novalidate)
-                      #mensaje 
-                        
                       .mb-3
                           label(for="dni" class="form-label") DNI
                           input#dni.form-control(type="dni" name="dni" placeholder="Ingrese su DNI" required)
@@ -29,6 +27,7 @@ html(lang="en")
                           label(for="password" class="form-label") Contraseña
                           input#password.form-control(type="password" name="password" placeholder="Ingrese su contraseña" required)
                           .invalid-feedback La contraseña es obligatoria.
+                      #mensaje.text-danger
                       .boton.d-flex.flex-row.justify-content-between
                         button.btn.btn-primary(type="button" onclick= "iniciarSesion()") Iniciar Sesión
                         a.btn.btn-secondary(href="/inicio/formRegistro") Registrarme

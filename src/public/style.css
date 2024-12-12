@@ -122,3 +122,18 @@ h1.text-center {
     color: #004d4d;
 }
 
+.medico-link {
+    font-size: 1.3rem; /* Ajusta el tamaño según sea necesario */
+    font-weight: bold; /* Opcional: para hacerlo más llamativo */
+}
+.medico-link:hover{
+    color:white
+}
+
+.cerrarSesion{
+    display: flex;
+
+}
+.cerrarSesion h5{
+    margin-top: 10px;
+}

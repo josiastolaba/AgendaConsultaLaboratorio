@@ -136,6 +136,7 @@ block content
                             th Hora Fin
                             th Fecha 
                             th Estado
+                            th Motivo
                             th DNI
                         tbody
                             each turno in turnos
@@ -145,6 +146,7 @@ block content
                                     td #{turno.fin_turno}
                                     td #{fecha}
                                     td #{turno.estado_turno}
+                                    td #{turno.motivo_consulta}
                                     if turno.dni 
                                         td #{turno.dni}
                                     else 
