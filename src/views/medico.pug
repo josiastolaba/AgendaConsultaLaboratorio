@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    .container.mt-5
+      h1 Formulario de Selección de Médicos y Especialidades
+      form.allforms(action="/medico/crearEspeMedic" method="POST")
+        .mb-3
+          label(for="usuario") Seleccione un Médico:
+          select#usuario.form-select(name="usuario" required)
+            each usuario_m in usuarios_m
+                option(value=usuario_m.dni) #{usuario_m.nombre} #{usuario_m.apellido}
+        .mb-3
+          label(for="especialidad") Seleccione una Especialidad:
+          select#especialidad.form-select(name="especialidad" required)
+            each especialidad in especialidades
+                option(value=especialidad.id_especialidad) #{especialidad.nombre_especialidad}
+        .d-grid
+          button.btn.btn-primary(type="submit") Crear

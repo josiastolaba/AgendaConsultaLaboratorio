@@ -1,0 +1,76 @@
+extends layout
+
+block content
+
+
+    h1.text-center Listar Usuario 
+    br
+    .contenedorGeneral.d-flex.justify-content-around.flex-row.w-100
+        .contenedorTable.w-50
+            table#userTable
+                thead 
+                    tr
+                        th DNI
+                        th Nombre
+                        th Apellido 
+                        th Direccion
+                        th Rol
+                        th Modificar
+                    tbody
+                        each usuario in usuarios
+                            tr 
+                                td #{usuario.dni}
+                                td #{usuario.nombre}
+                                td #{usuario.apellido}
+                                td #{usuario.direccion}
+                                td #{usuario.rol}
+                                td 
+                                    button.btn.btn-primary(type="submit" onClick=`cargarFormulario(${JSON.stringify(usuario)})`) editar
+                                        
+        .contenedorForm
+            form.allforms.m-3(action="/usuario/modificar" method="POST" class="needs-validation" novalidate)
+                .mb-3
+                    label(for="dni" class="form-label") DNI
+                    input#dni.form-control(type="number" name="dni" placeholder="Ingrese su DNI" required)
+                    .invalid-feedback El DNI es obligatorio.
+                .mb-3
+                    label(for="nombre" class="form-label") Nombre
+                    input#nombre.form-control(type="text" name="nombre" placeholder="Ingrese su nombre" maxlength="20" required)
+                    .invalid-feedback El nombre es obligatorio.
+                .mb-3
+                    label(for="apellido" class="form-label") Apellido
+                    input#apellido.form-control(type="text" name="apellido" placeholder="Ingrese su apellido" maxlength="20" required)
+                    .invalid-feedback El apellido es obligatorio.
+                .mb-3
+                    label(for="direccion" class="form-label") Dirección
+                    input#direccion.form-control(type="text" name="direccion" placeholder="Ingrese su dirección" maxlength="25" required)
+                    .invalid-feedback La dirección es obligatoria.
+                .mb-3
+                    label(for="fechaNacimiento" class="form-label") Fecha de Nacimiento
+                    input#fechaNacimiento.form-control(type="date" name="fechaNacimiento" required)
+                    .invalid-feedback La fecha de nacimiento es obligatoria.
+                .mb-3
+                    label(for="email" class="form-label") Correo Electrónico
+                    input#email.form-control(type="email" name="email" placeholder="Ingrese su correo electrónico" maxlength="30" required)
+                    .invalid-feedback El correo electrónico es obligatorio y debe ser válido.
+                .mb-3
+                    label(for="img_doc" class="form-label") Documento (imagen)
+                    input#img_doc.form-control(type="file" name="img_doc" accept="image/*" required)
+                    .invalid-feedback Es obligatorio subir una copia de su documento.
+                .mb-3
+                    label(for="estado_usuario").form-label Estado de Usuario
+                    select#estado_usuario.form-select(name="estado_usuario" required)
+                        option(value=1 selected) Activo
+                        option(value=0) Inactivo
+                .mb-3
+                    label(for="rol" class="form-label") Título de Rol
+                    select#rol.form-select(name="rol" required)
+                        each rol in roles
+                            option(value=rol.id_rol) #{rol.rol}
+                    .invalid-feedback Es obligatorio seleccionar un rol.
+                input#id_usuario(name="id_usuario" type="hidden" value="")
+                button.btn.btn-primary(type="submit") Modificar
+    
+    script.
+        let table = new DataTable('#userTable');
+    script(src="/modificarUsuario.js")

@@ -1,0 +1,124 @@
+body {
+    background-image: url("/images/Fondo.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    font-family: 'Roboto', sans-serif; /* Fuente moderna */
+    color: #333; /* Texto en color oscuro para contraste */
+}
+
+/* Tablas */
+table th {
+    background-color: #98dede; /* Color más suave y moderno */
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #004d4d;
+}
+
+table {
+    background-color: rgba(152, 222, 222, 0.9);
+    border-collapse: collapse; /* Elimina espacio entre bordes */
+    border-radius: 8px;
+    overflow: hidden; /* Evita bordes sobresalientes */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+}
+
+table td, table th {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Línea separadora suave */
+}
+
+/* Formularios */
+.allforms {
+    background-color: rgba(152, 222, 222, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Inputs */
+input.form-control {
+    border: 1px solid #98dede;
+    border-radius: 5px;
+    padding: 10px;
+    transition: all 0.3s ease; /* Transición suave */
+}
+
+input.form-control:focus {
+    outline: none;
+    border-color: #006666; /* Color de foco */
+    box-shadow: 0 0 5px rgba(0, 102, 102, 0.5); /* Efecto de enfoque */
+}
+
+/* Botones */
+button.btn-primary, a.btn-secondary {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease; /* Transición suave */
+}
+
+button.btn-primary {
+    background-color: #004d4d;
+    border: none;
+    color: white;
+}
+
+button.btn-primary:hover {
+    background-color: #006666;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+a.btn-secondary {
+    background-color: #98dede;
+    color: #004d4d;
+    text-decoration: none;
+    border: none;
+}
+
+a.btn-secondary:hover {
+    background-color: #80cccc;
+    color: white;
+}
+
+/* Contenedor General */
+.contenedorGeneral {
+    background-color: rgba(152, 222, 222, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1400px; /* Ancho máximo */
+}
+
+/* Navbar */
+.navbar {
+    background-color: rgba(152, 222, 222, 0.9) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Tarjetas */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para efecto flotante */
+    overflow: hidden;
+}
+
+.card-body {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+h1.text-center {
+    font-size: 24px;
+    font-weight: bold;
+    color: #004d4d;
+}
+
