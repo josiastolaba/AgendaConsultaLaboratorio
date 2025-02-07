@@ -3,14 +3,15 @@ import { obtenerTodasLasMatriculas } from "../models/especialidad_medicoModel.js
 import { obtenerTodasLasSucursales } from "../models/sucursalModel.js"
 import { obtenerTodasLasClasificaciones } from "../models/clasificacion_de_agendaModel.js"
 import { listarTodosTurnosPorAgenda } from "../models/turnoModel.js"
-
+import { traerDias } from "../models/diasModel.js"
 export const formAgenda = async (req,res)=>{ 
     try {
         const matriculas = await obtenerTodasLasMatriculas()
         const sucursales = await obtenerTodasLasSucursales()
         const clasificaciones = await obtenerTodasLasClasificaciones()
         const agendas = await obtenerTodosAgendasActuales()
-        res.render('agenda',{usuario: req.session.usuario,matriculas,sucursales,clasificaciones,agendas})
+        const dias = await traerDias()
+        res.render('agenda',{usuario: req.session.usuario,matriculas,sucursales,clasificaciones,agendas,dias})
     } catch (error) {
         console.error("Error formAgenda", error)
     }

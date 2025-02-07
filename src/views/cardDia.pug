@@ -1,0 +1,12 @@
+each dia in dias
+        .dia.dia_espanol
+          //- Checkbox para seleccionar el día
+          label(for=dia.dia_espanol)
+            input(type="checkbox", id=dia.dia_espanol, name="dias", value=dia.dia_espanol, dia_id=dia.id_dia)
+            |  #{dia.dia_espanol}
+          //- Menú desplegable para elegir el turno asociado al día
+          select(name=`turno_${dia.dia_espanol}`)
+            option(value="") Selecciona turno
+            option(value="mañana") Mañana
+            option(value="tarde") Tarde
+            option(value="ambos") Ambos
