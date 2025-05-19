@@ -9,8 +9,8 @@ export const listarTurnosPorAgenda = async (id_agenda) =>{
             JOIN estado_turno et ON t.id_estado_turno = et.id_estado_turno
             LEFT JOIN persona p ON p.dni = t.dni
             WHERE a.id_agenda = ?
-            AND DATE(NOW()) <= DATE(t.fecha) 
-            AND (DATE(NOW()) != DATE(t.fecha) OR TIME(NOW()) <= TIME(t.inicio_turno));
+            /*AND DATE(NOW()) <= DATE(t.fecha) 
+            AND (DATE(NOW()) != DATE(t.fecha) OR TIME(NOW()) <= TIME(t.inicio_turno))*/;
             `
         const [resultado] = await connection.execute(consulta,[id_agenda])
         return resultado

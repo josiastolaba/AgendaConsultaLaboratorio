@@ -2,158 +2,164 @@ extends layout
 
 block content
     .container.mt-5
-      h2.mb-4 Crear Nueva Agenda
-      if(agendaCreada)
-        h2 Se creo la agenda
-      form.allforms(action="/agendas/crearAgenda" method="POST" style="height:500px;")
-        - const today = new Date().toISOString().split('T')[0]
-        #p1sucursal
-            .mb-3
-                label(for="id_sucursal").form-label Sucursal
-                select#id_sucursal.form-select(name="id_sucursal" required)
-                    each sucursal in sucursales
-                        option(value=sucursal.id_sucursal) Nombre: #{sucursal.nombre_sucursal}  Direccion: #{sucursal.direccion_sucursal}
-            button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p2matricula')") Siguiente Seccion
-        #p2matricula.d-none
-            .mb-3
-                label(for="matricula").form-label Matrícula
-                select#matricula.form-select(name="matricula" required)
-                    each matricula in matriculas
-                        option(value=matricula.matricula) #{matricula.matricula} Nombre: #{matricula.nombre} #{matricula.apellido}  Especialidad: #{matricula.nombre_especialidad}
-            button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p1sucursal')") Seccion Anterior
-            button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p3fecha')") Siguiente Seccion
-        #p3fecha.d-none
-            .mb-3
-                label(for="fecha_inicio").form-label Fecha de Inicio
-                input#fecha_inicio.form-control(type="date" name="fecha_inicio" required min=today)
-            .mb-3
-                label(for="fecha_fin").form-label Fecha de Fin
-                input#fecha_fin.form-control(type="date" name="fecha_fin" required min=today)
-            button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p2matricula')") Seccion Anterior
-            button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p4dias')") Siguiente Seccion
-        #p4dias.d-none
-            fieldset
-                legend Días de la semana:
-                label
-                    input(type="checkbox" name="dias" value="2")
-                    | Lunes
-                label
-                    input(type="checkbox" name="dias" value="3")
-                    | Martes
-                label
-                    input(type="checkbox" name="dias" value="4")
-                    | Miércoles
-                label
-                    input(type="checkbox" name="dias" value="5")
-                    | Jueves
-                label
-                    input(type="checkbox" name="dias" value="6")
-                    | Viernes
-                label
-                    input(type="checkbox" name="dias" value="7")
-                    | Sábado
-                label
-                    input(type="checkbox" name="dias" value="1")
-                    | Domingo
-            fieldset
-                legend Seleccione un turno:
-                label
-                    input(type="radio" name="turno" value="mañana")
-                    | Turno Mañana
-                label
-                    input(type="radio" name="turno" value="tarde")
-                    | Turno Tarde
-                label
-                    input(type="radio" name="turno" value="doble")
-                    | Doble Turno
-            button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p3fecha')") Seccion Anterior
-            button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p5horas')") Siguiente Seccion
-        #p5horas.d-none
-            .row
-                #turnomaniana.d-none.col
-                    h5 Mañana
-                    .mb-3
-                        label(for="hora_inicio_maniana").form-label Hora de Inicio
-                        input#hora_inicio_maniana.form-control(type="time" name="hora_inicio_maniana" min="00:00" max="12:00")
-                    .mb-3
-                        label(for="hora_fin_maniana").form-label Hora de Fin
-                        input#hora_fin_maniana.form-control(type="time" name="hora_fin_maniana" min="00:00" max="12:00")
-                #turnotarde.d-none.col
-                    h5 Tarde
-                    .mb-3
-                        label(for="hora_inicio_tarde").form-label Hora de Inicio
-                        input#hora_inicio_tarde.form-control(type="time" name="hora_inicio_tarde" min="12:00" max="00:00")
-                    .mb-3
-                        label(for="hora_fin_tarde").form-label Hora de Fin
-                        input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
-            .mb-3
-                label(for="intervalo_turno").form-label Intervalo de Turno
-                input#intervalo_turno.form-control(type="time" name="intervalo_turno" required step="600")
-            button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p4dias')") Seccion Anterior
-            button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p6final')") Siguiente Seccion
-        #p6final.d-none  
-            .mb-3
-                label(for="max_sobreTurno").form-label Máximo Sobreturno
-                input#max_sobreTurno.form-control(type="number" name="max_sobreTurno" min="0" required)
-            .mb-3
-                label(for="estado_agenda").form-label Estado de Agenda
-                select#estado_agenda.form-select(name="estado_agenda" required)
-                    option(value=1 selected) Activo
-                    option(value=0) Inactivo
-            .mb-3
-                label(for="id_clasificacion").form-label Clasificación
-                select#id_clasificacion.form-select(name="id_clasificacion" required)
-                    each clasificacion in clasificaciones
-                        option(value=clasificacion.id_clasificacion) #{clasificacion.nombre_clasificacion}
-            .mb-3
-                label(for="descripcion").form-label Descripción
-                textarea#descripcion.form-control(name="descripcion" rows="3" maxlength="100" required)
-            button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p5horas')") Seccion Anterior
-            button.btn.btn-success(type="submit") Crear Agenda
-    .container
-        .card
-            .card-body
-            h1.text-center Buscar Agenda
-            form.allforms(action="/agendas/buscar" method="POST" class="needs-validation" novalidate)
+        h2.mb-4 Crear Nueva Agenda
+        if(agendaCreada)
+            h2 Se creó la agenda
+        form.allforms(action="/agendas/crearAgenda" method="POST" style="height:750px; width: 1500px; ")
+            - const today = new Date().toISOString().split('T')[0]
+            #p1sucursal(style="width: 1500px")
+                each dia in dias
+                    .dia.dia_espanol
+                        //- Checkbox para seleccionar el día
+                        label(for=dia.dia_espanol)
+                        input(type="checkbox", id=dia.dia_espanol, name="dias", value=dia.id_dia, nombre_dia = dia.dia_espanol)
+                        |  #{dia.dia_espanol}
+                        //- Menú desplegable para elegir el turno asociado al día
+                        select(name=`turno_${dia.id_dia}`)
+                            option(value="") Selecciona turno
+                            option(value="mañana") Mañana
+                            option(value="tarde") Tarde
+                            option(value="ambos") Ambos
+                br
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p2sucursal'), manejarDia()") Siguiente Sección
+            #p2sucursal.d-none
+                #containerDia.d-flex.justify-content-around
+                //- .cartas.d-flex
+                //-     .card
+                //-         .card-body
+                //-             .form-group
+                //-                 label(for="dia") Día de la Semana: Lunes
+                //-             .form-group
+                //-                 label Horarios de Turno:
+                //-                 .turno-opciones
+                //-                     label(for="hora_fin_tarde").form-label Inicio mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-                     label(for="hora_fin_tarde").form-label Inicio tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-     .card
+                //-         .card-body
+                //-             .form-group
+                //-                 label(for="dia") Día de la Semana: Martes
+                //-             .form-group
+                //-                 label Horarios de Turno:
+                //-                 .turno-opciones
+                //-                     label(for="hora_fin_tarde").form-label Inicio mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-                     label(for="hora_fin_tarde").form-label Inicio tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-     .card
+                //-         .card-body
+                //-             .form-group
+                //-                 label(for="dia") Día de la Semana: Miercoles
+                //-             .form-group
+                //-                 label Horarios de Turno:
+                //-                 .turno-opciones
+                //-                     label(for="hora_fin_tarde").form-label Inicio mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-                     label(for="hora_fin_tarde").form-label Inicio tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-     .card
+                //-         .card-body
+                //-             .form-group
+                //-                 label(for="dia") Día de la Semana: Jueves
+                //-             .form-group
+                //-                 label Horarios de Turno:
+                //-                 .turno-opciones
+                //-                     label(for="hora_fin_tarde").form-label Inicio mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-                     label(for="hora_fin_tarde").form-label Inicio tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-     .card
+                //-         .card-body
+                //-             .form-group
+                //-                 label(for="dia") Día de la Semana: Viernes
+                //-             .form-group
+                //-                 label Horarios de Turno:
+                //-                 .turno-opciones
+                //-                     label(for="hora_fin_tarde").form-label Inicio mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin mañana
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                //-                     label(for="hora_fin_tarde").form-label Inicio tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="00:00" max="12:00")
+                //-                     label(for="hora_fin_tarde").form-label Fin tarde
+                //-                     input#hora_fin_tarde.form-control(type="time" name="hora_fin_tarde" min="12:00" max="00:00")
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p1sucursal')") Sección Anterior
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p3sucursal'), cardDias()") Siguiente Sección
+            #p3sucursal.d-none
                 .mb-3
-                label(for="agenda" class="form-label") Seleccione un Agenda
-                select#agenda.form-select(name="id_agenda" required)
-                    if agendas && agendas.length > 0
-                        each agenda in agendas
-                            option(value=agenda.id_agenda) #{agenda.nombre} #{agenda.apellido} #{agenda.nombre_especialidad}
-                    else
-                        option(disabled selected) No hay agendas disponibles  
-                .invalid-feedback Debe seleccionar una agenda
-                .boton.d-flex.justify-content-center
-                button.btn.btn-primary(type="submit") Buscar
-    .contenedorGeneral.d-flex.justify-content-around.flex-row.w-100
-        .contenedorTable.w-50.m-3
-            if (turnos)
-                table#turnoTable
-                    thead 
-                        tr 
-                            th Hora Inicio
-                            th Hora Fin
-                            th Fecha 
-                            th Estado
-                            th Motivo
-                            th DNI
-                        tbody
-                            each turno in turnos
-                                -const fecha = new Date(turno.fecha).toISOString().split('T')[0]
-                                tr 
-                                    td #{turno.inicio_turno}
-                                    td #{turno.fin_turno}
-                                    td #{fecha}
-                                    td #{turno.estado_turno}
-                                    td #{turno.motivo_consulta}
-                                    if turno.dni 
-                                        td #{turno.dni}
-                                    else 
-                                        td 
-
-
+                    label(for="id_sucursal").form-label Sucursal
+                    select#id_sucursal.form-select(name="id_sucursal" required)
+                        each sucursal in sucursales
+                            option(value=sucursal.id_sucursal) #{sucursal.nombre_sucursal} - #{sucursal.direccion_sucursal}
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p2sucursal')") Sección Anterior
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p4matricula')") Siguiente Sección
+            #p4matricula.d-none
+                .mb-3
+                    label(for="matricula").form-label Matrícula
+                    select#matricula.form-select(name="matricula" required)
+                        each matricula in matriculas
+                            option(value=matricula.matricula) #{matricula.matricula} - #{matricula.nombre} #{matricula.apellido} - #{matricula.nombre_especialidad}
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p3sucursal')") Sección Anterior
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p5final')") Siguiente Sección
+            #p5final.d-none
+                .mb-3
+                            label(for="intervalo_turno").form-label Intervalo de Turno
+                            input#intervalo_turno.form-control(type="time" name="intervalo_turno" required step="600")
+                .mb-3
+                    label(for="max_sobreTurno").form-label Máximo Sobreturno
+                    input#max_sobreTurno.form-control(type="number" name="max_sobreTurno" min="0" required)
+                .mb-3
+                    label(for="estado_agenda").form-label Estado de Agenda
+                    select#estado_agenda.form-select(name="estado_agenda" required)
+                        option(value=1 selected) Activo
+                        option(value=0) Inactivo
+                .mb-3
+                    label(for="id_clasificacion").form-label Clasificación
+                    select#id_clasificacion.form-select(name="id_clasificacion" required)
+                        each clasificacion in clasificaciones
+                            option(value=clasificacion.id_clasificacion) #{clasificacion.nombre_clasificacion}
+                .mb-3
+                    label(for="descripcion").form-label Descripción
+                    textarea#descripcion.form-control(name="descripcion" rows="3" maxlength="100" required)
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p4matricula')") Sección Anterior
+                button.btn.btn-success(type="button" onclick="manejarAgenda()") Crear Agenda
+    br
+    br
+    .container
+        .card-inicio
+            .card-body-inicio
+                h1.text-center Buscar Agenda
+                form.allforms(action="/agendas/buscar" method="POST" class="needs-validation" novalidate)
+                    .mb-3
+                        label(for="agenda" class="form-label") Seleccione una Agenda
+                        select#agenda.form-select(name="id_agenda" required)
+                            if agendas && agendas.length > 0
+                                each agenda in agendas
+                                    option(value=agenda.id_agenda) #{agenda.nombre} #{agenda.apellido} - #{agenda.nombre_especialidad}
+                            else
+                                option(disabled selected) No hay agendas disponibles
+                        .invalid-feedback Debe seleccionar una agenda
+                    .boton.d-flex.justify-content-center
+                        button.btn.btn-primary(type="submit") Buscar
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js")
     script(src="/validaciones.js")
     script.
         let table = new DataTable('#turnoTable');
+    script(src="/selecDias.js")

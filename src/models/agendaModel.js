@@ -1,14 +1,14 @@
 import connection from '../database/db.js'
 
 
-export const insertarAgenda = async(hora_inicio_maniana, hora_fin_maniana, intervalo_turno, max_sobreTurno, estado_agenda, matricula, id_sucursal, descripcion, fecha_inicio, fecha_fin, id_clasificacion, turno, hora_inicio_tarde, hora_fin_tarde,dias) =>{
+export const insertarAgenda = async(estado_agenda, matricula, id_sucursal, descripcion, id_clasificacion,id_configuracion) =>{
     try {
         const consulta = `
-            INSERT INTO agenda(hora_inicio_maniana, hora_fin_maniana, intervalo_turno, max_sobreTurno, estado_agenda, matricula, id_sucursal, descripcion, fecha_inicio, fecha_fin, id_clasificacion, turno, hora_inicio_tarde, hora_fin_tarde) 
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            INSERT INTO agenda(estado_agenda, matricula, id_sucursal, descripcion, id_clasificacion,id_configuracion) 
+            VALUES (?,?,?,?,?,?)
             `
         const [resultado] = await connection.execute(consulta,
-            [hora_inicio_maniana, hora_fin_maniana, intervalo_turno, max_sobreTurno, estado_agenda, matricula, id_sucursal, descripcion, fecha_inicio, fecha_fin, id_clasificacion, turno, hora_inicio_tarde, hora_fin_tarde])
+            [estado_agenda, matricula, id_sucursal, descripcion, id_clasificacion,id_configuracion])
         return resultado
     } catch (error) {
         console.error("Error insertarAgenda", error)   
@@ -60,31 +60,6 @@ export const obtenerTodosAgendasActuales = async () =>{
     }
 }
 
-export const insertarAgendaDia = async (id_agenda, dias) => {
-    const conexion = await connection.getConnection();
-    try {
-        const consulta = `
-            INSERT INTO agenda_dia (id_dia, id_agenda) VALUES (?, ?)
-        `;
-        
-        // Iniciar una transacción
-        await conexion.beginTransaction();
-
-        // Iterar sobre el arreglo de días e insertar cada par (id_dia, id_agenda)
-        for (const dia of dias) {
-            await conexion.execute(consulta, [dia, id_agenda]);
-        }
-
-        // Confirmar la transacción
-        await conexion.commit();
-        return { success: true, message: "Datos insertados correctamente." };
-    } catch (error) {
-        console.error("Error al insertar agenda_dia:", error);
-        // Revertir la transacción en caso de error
-        await conexion.rollback();
-        return { success: false, error: error.message };
-    }
-};
 
 
 

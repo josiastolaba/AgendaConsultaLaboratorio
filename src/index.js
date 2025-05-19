@@ -60,6 +60,9 @@ app.use('/usuario',verificarAutenticador, usuarioRoutes)
 app.use('/agendas', verificarAutenticador, agendaRoutes)
 app.use('/inicio', inicioRoutes);
 app.use('/',verificarAutenticador , indexRoutes);
+app.get((req,res)=>{
+    
+})
 app.listen(port, ()=>{
     console.log("servidor corriendo en el puerto", port)
 })

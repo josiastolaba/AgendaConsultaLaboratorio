@@ -12,6 +12,16 @@ export const getTurno = async (req,res)=>{
     }
 }
 
+export const getTurno2 = async (req,res)=>{
+    try{
+        const turnos = await listarTurnosPorAgenda(req.params.id_agenda)
+        console.log(turnos)
+        res.json(turnos)
+      }catch(error){
+        console.log(error)
+      }
+}
+
 export const traerTurnos = async (req,res)=>{
     try {
         const agendas = await obtenerTodosAgendasActuales()

@@ -50,7 +50,6 @@ export const modificarUsuario = async (id_rol,estado_usuario,id_usuario) =>{
             WHERE usuario.id_usuario = ?
             `
         const [resultado] = await connection.execute(consulta,[id_rol,estado_usuario,id_usuario])
-
         return resultado
     } catch (error) {
         console.error("Error modificarUsuario", error)   
