@@ -2,12 +2,11 @@ extends layout
 
 block content
     #calendar
-
     .container
             .card
                 .card-body
                 h1.text-center Buscar Agenda
-                form.allforms(action="/turno/buscar" method="POST" class="needs-validation" novalidate)
+                .divAgendas
                     .mb-3
                     label(for="agenda" class="form-label") Seleccione un Agenda
                     select#agenda.form-select(name="id_agenda" required)
@@ -15,122 +14,7 @@ block content
                             option(value=agenda.id_agenda) #{agenda.nombre} #{agenda.apellido} #{agenda.nombre_especialidad}  
                     .invalid-feedback Debe seleccionar una agenda
                     .boton.d-flex.justify-content-center
-                    button.btn.btn-primary(type="submit") Buscar
-    .contenedorGeneral.d-flex.justify-content-around.flex-row.w-100
-        .contenedorTable.w-50.m-3
-                if (turnos)
-                    table#turnoTable
-                        thead 
-                            tr 
-                                th Hora Inicio
-                                th Hora Fin
-                                th Fecha 
-                                th Estado
-                                th Motivo
-                                th DNI
-                                th
-                                th Confirmar 
-                                th Cancelar
-                            tbody
-                                each turno in turnos
-                                    -const fecha = new Date(turno.fecha).toISOString().split('T')[0]
-                                    tr 
-                                        td #{turno.inicio_turno}
-                                        td #{turno.fin_turno}
-                                        td #{fecha}
-                                        td #{turno.estado_turno}
-                                        td #{turno.motivo_consulta}
-                                        if turno.dni 
-                                          td #{turno.dni}
-                                        else 
-                                          td 
-                                        if(turno.id_estado_turno == 1 || turno.id_estado_turno == 4)
-                                          td 
-                                              button.btn.btn-primary.select(type="button" onclick=`seleccionarTurno(this,${turno.id_turno})`) Seleccionar
-                                          td 
-                                              button.btn.btn-secondary.w-100(type="submit" disabled) Confirmar
-                                          td 
-                                              button.btn.btn-secondary.w-100(type="submit" disabled) Cancelar
-                                        else if(turno.id_estado_turno == 2)
-                                          td
-                                              button.btn.btn-secondary.w-100(type="button" disabled) Reservado 
-                                          td 
-                                            form(action="/turno/confirmar" method="POST" novalidate)
-                                              input(name="id_turno" type="hidden" value=turno.id_turno)
-                                              button.btn.btn-success.w-100(type="submit") Confirmar
-                                          td 
-                                            form(action="/turno/cancelar" method="POST" novalidate)
-                                              input(name="id_turno" type="hidden" value=turno.id_turno)
-                                              button.btn.btn-danger.w-100(type="submit") Cancelar
-                                        else 
-                                          td 
-                                          td 
-                                          td 
-        .contenedorForm
-            form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
-                .mb-3
-                    label(for="motivo" class="form-label") Motivo
-                    textarea#motivo.form-control(name="motivo" placeholder="Ingrese el motivo" rows="3" required)
-                    .invalid-feedback El motivo es obligatorio.
-                .mb-3
-                    label(for="paciente" class="form-label") Seleccionar Paciente
-                    input#paciente.form-select(list="pacientes" name="paciente" required)
-                    .invalid-feedback El paciente es obligatorio
-                    datalist#pacientes
-                        each paciente in pacientes
-                            option(value=paciente.dni) #{paciente.nombre} #{paciente.apellido}
-                    .invalid-feedback Es obligatorio seleccionar un paciente.
-                input#id_turno(name="id_turno" type="hidden" value="")
-                button.btn.btn-primary(type="submit") Guardar
-                button.btn.btn-dark(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal") Registrar Paciente
-    .modal.fade#exampleModal(tabindex="-1", aria-labelledby="exampleModalLabel", aria-hidden="true" )
-      .modal-dialog.modal-dialog-scrollable(style="height: 90vh")
-        .modal-content
-          .modal-header
-            h1.modal-title.fs-5#exampleModalLabel Formulario
-            button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
-          .modal-body
-                    h1.text-center Ingresar Datos
-                    form(action="/usuario/crear" method="POST" class="needs-validation" novalidate)
-                      .mb-3
-                        label(for="dni" class="form-label") DNI
-                        input#dni.form-control(type="number" name="dni" placeholder="Ingrese su DNI" required)
-                        .invalid-feedback El DNI es obligatorio.
-                      .mb-3
-                        label(for="nombre" class="form-label") Nombre
-                        input#nombre.form-control(type="text" name="nombre" placeholder="Ingrese su nombre" maxlength="20" required)
-                        .invalid-feedback El nombre es obligatorio.
-                      .mb-3
-                        label(for="apellido" class="form-label") Apellido
-                        input#apellido.form-control(type="text" name="apellido" placeholder="Ingrese su apellido" maxlength="20" required)
-                        .invalid-feedback El apellido es obligatorio.
-                      .mb-3
-                        label(for="direccion" class="form-label") Dirección
-                        input#direccion.form-control(type="text" name="direccion" placeholder="Ingrese su dirección" maxlength="25" required)
-                        .invalid-feedback La dirección es obligatoria.
-                      .mb-3
-                        label(for="fechaNacimiento" class="form-label") Fecha de Nacimiento
-                        input#fechaNacimiento.form-control(type="date" name="fechaNacimiento" required)
-                        .invalid-feedback La fecha de nacimiento es obligatoria.
-                      .mb-3
-                        label(for="email" class="form-label") Correo Electrónico
-                        input#email.form-control(type="email" name="email" placeholder="Ingrese su correo electrónico" maxlength="30" required)
-                        .invalid-feedback El correo electrónico es obligatorio y debe ser válido.
-                      .mb-3
-                        label(for="password" class="form-label") Contraseña
-                        input#password.form-control(type="password" name="password" placeholder="Ingrese una contraseña" required)
-                        .invalid-feedback La contraseña es obligatoria.
-                      .mb-3
-                        label(for="img_doc" class="form-label") Documento (imagen)
-                        input#img_doc.form-control(type="file" name="img_doc" accept="image/*" required)
-                        .invalid-feedback Es obligatorio subir una copia de su documento.
-                      .boton.d-flex.flex-row.justify-content-between
-                        button.btn.btn-primary(type="submit") Registrarse
-          .modal-footer
-
-               
-    script.
-        let table = new DataTable('#turnoTable');
+                    button.btn.btn-primary(type="button" onclick="cargarCalendario()") Buscar
     script(src="/tomarTurno.js")  
     script(src="/calendar.js")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous")                              

@@ -1,18 +1,19 @@
-document.addEventListener('DOMContentLoaded', function() {
-
-    let request_calendar = "/events.json"
+document.addEventListener('DOMContentLoaded',cargarCalendario)
+let request_calendar = "/events.json"
+function cargarCalendario(){
 
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-
+        
         events:function(info, successCallback, failureCallback){
-            fetch("http://localhost:3000/agendas/getAgenda/10")
+            fetch("http://localhost:3000/agendas/getAgenda/" + document.getElementById("agenda").value)
                 .then(function(response){
                     console.log(response.status)
                     return response.json()
                 })
                 .then(function(data){
+                    console.log(data)
                     const eventos = []
                     let events = eventos
                     let datos = data.map(function(event){
@@ -36,14 +37,37 @@ document.addEventListener('DOMContentLoaded', function() {
                                         title: ".",
                                         start: new Date(fechaActual),
                                         end: new Date(fechaActual),
-                                        url:`/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio_m=${horaInicioM}&hora_fin_m=${horaFinM}&fecha=${fechaActual}`,
+                                        url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horaFinM}&fecha=${fechaActual}`,
                                         location: event.eventLocation || "",
                                         timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes(),
                                         timeEnd: horaFinM.getHours()+":"+horaFinM.getMinutes(),
-                                        //CREAR UNA RUTA EN ROUTES/CONTROLER QUE MANEJE LOS DATOS/COMO RECIBIR QUERY a
+                                        
                                     })
                                     horaInicioM.setMinutes(horaInicioM.getMinutes() + Number(event.intervalo_turno))
                                 }
+                                if(event.horario_inicio_t && event.horario_fin_t){
+                                    const [horasIT,minutosIT] = event.horario_inicio_t.split(":").map(Number)
+                                    const [horasFT,minutosFT] = event.horario_fin_t.split(":").map(Number)
+                                    let horaInicioT = new Date()
+                                    let horaFinT = new Date()
+                                    horaInicioT.setHours(horasIT,minutosIT,0,0)
+                                    horaFinT.setHours(horasFT,minutosFT,0,0)
+                                    while(horaInicioT < horaFinT){
+                                        eventos.push({
+                                            title: ".",
+                                            start: new Date(fechaActual),
+                                            end: new Date(fechaActual),
+                                            url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horaFinT}&fecha=${fechaActual}`,
+                                            location: event.eventLocation || "",
+                                            timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes(),
+                                            timeEnd: horaFinT.getHours()+":"+horaFinT.getMinutes(),
+                                        
+                                        })
+                                    horaInicioT.setMinutes(horaInicioT.getMinutes() + Number(event.intervalo_turno))
+                                    }
+                                }
+                                
+                                
                             }
                             fechaActual.setDate(fechaActual.getDate() + 1)
                         }
@@ -102,12 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector(".fc-hoverable-event").remove()
         }
     });
+    
     calendar.render();
-});
+}
 
 function saludo(){
     console.log("HOLA MUNDO!!")
 }
-
-
-

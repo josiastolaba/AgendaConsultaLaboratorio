@@ -74,3 +74,15 @@ export const cancelar = async(id_turno)=>{
         console.error("Error cancelar", error)
     }
 }
+
+export const insertTurno = async(inicio_turno,fin_turno,motivo_consulta, dni,id_agenda,fecha, sobreturno)=>{
+    try {
+        const consulta = `
+            INSERT INTO turno(inicio_turno, fin_turno, id_estado_turno, motivo_consulta, dni, id_agenda, fecha, sobreturno) VALUES (?,?,?,?,?,?,?,?)
+        `
+        const [resultado] = await connection.execute(consulta,[inicio_turno,fin_turno,2,motivo_consulta,dni,id_agenda,fecha,sobreturno])
+        return resultado
+    } catch (error) {
+        console.error("Error insertTurno", error)
+    }
+}
