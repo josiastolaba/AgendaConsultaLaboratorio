@@ -47,7 +47,7 @@ export const guardarAgenda = async(req,res)=>{
 export const listarTurno = async (req,res)=>{
     try {
         const matriculas = await obtenerTodasLasMatriculas()
-        const agendas = await obtenerTodosAgendasActuales()
+        const agendas = await obtenerTodosAgendasActuales() 
         const sucursales = await obtenerTodasLasSucursales()
         const clasificaciones = await obtenerTodasLasClasificaciones()
         let turnos = []
@@ -59,4 +59,18 @@ export const listarTurno = async (req,res)=>{
     } catch (error) {
         console.error("Error traerTurnos",error)
     }
+<<<<<<< Updated upstream
+=======
+}
+
+export const traerAgenda = async (req,res)=>{
+    try {
+        const {id_agenda} = req.params
+        const agenda = await traerHxAgenda(id_agenda)
+        console.log(agenda)
+        return res.json(agenda)
+    } catch (error) {
+        console.error("Error traerAgenda",error)
+    }
+>>>>>>> Stashed changes
 }

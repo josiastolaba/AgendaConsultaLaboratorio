@@ -6,7 +6,7 @@ block content
             .card
                 .card-body
                 h1.text-center Buscar Agenda
-                form.allforms(action="/turno/buscar" method="POST" class="needs-validation" novalidate)
+                .divAgendas
                     .mb-3
                     label(for="agenda" class="form-label") Seleccione un Agenda
                     select#agenda.form-select(name="id_agenda" required)
@@ -14,7 +14,7 @@ block content
                             option(value=agenda.id_agenda) #{agenda.nombre} #{agenda.apellido} #{agenda.nombre_especialidad}  
                     .invalid-feedback Debe seleccionar una agenda
                     .boton.d-flex.justify-content-center
-                    button.btn.btn-primary(type="submit") Buscar
+                    button.btn.btn-primary(type="button" onclick="cargarCalendario()") Buscar
     .contenedorGeneral.d-flex.justify-content-around.flex-row.w-100
         .contenedorTable.w-50.m-3
                 if (turnos)
@@ -65,22 +65,7 @@ block content
                                           td 
                                           td 
                                           td 
-        .contenedorForm
-            form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
-                .mb-3
-                    label(for="motivo" class="form-label") Motivo
-                    textarea#motivo.form-control(name="motivo" placeholder="Ingrese el motivo" rows="3" required)
-                    .invalid-feedback El motivo es obligatorio.
-                .mb-3
-                    label(for="paciente" class="form-label") Seleccionar Paciente
-                    input#paciente.form-select(list="pacientes" name="paciente" required)
-                    .invalid-feedback El paciente es obligatorio
-                    datalist#pacientes
-                        each paciente in pacientes
-                            option(value=paciente.dni) #{paciente.nombre} #{paciente.apellido}
-                    .invalid-feedback Es obligatorio seleccionar un paciente.
-                input#id_turno(name="id_turno" type="hidden" value="")
-                button.btn.btn-primary(type="submit") Guardar
+        
                 button.btn.btn-dark(type="button", data-bs-toggle="modal", data-bs-target="#exampleModal") Registrar Paciente
     .modal.fade#exampleModal(tabindex="-1", aria-labelledby="exampleModalLabel", aria-hidden="true" )
       .modal-dialog.modal-dialog-scrollable(style="height: 90vh")
