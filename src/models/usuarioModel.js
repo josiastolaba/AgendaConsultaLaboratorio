@@ -59,11 +59,9 @@ export const modificarUsuario = async (id_rol,estado_usuario,id_usuario) =>{
 export const obtenerTodosLosMedicos = async () =>{
     try {
         const consulta = `
-            SELECT u.*, p.*,em.*
-            FROM usuario u 
+            SELECT u.*, p.* 
+            FROM usuario u	
             JOIN persona p ON u.dni = p.dni
-            JOIN especialidad_medico em ON u.dni = em.dni
-            JOIN especialidad e ON em.id_especialidad = e.id_especialidad
             WHERE u.id_rol = 2
             `
         const [resultado] = await connection.execute(consulta)

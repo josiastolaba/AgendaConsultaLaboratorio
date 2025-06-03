@@ -4,7 +4,7 @@ import { insertarAgenda, obtenerTodosAgendasActuales } from "../models/agendaMod
 import { obtenerTodasLasMatriculas } from "../models/especialidad_medicoModel.js"
 import { obtenerTodasLasSucursales } from "../models/sucursalModel.js"
 import { obtenerTodasLasClasificaciones } from "../models/clasificacion_de_agendaModel.js"
-import { listarTodosTurnosPorAgenda } from "../models/turnoModel.js"
+import { listarTodosTurnosPorAgenda, listarTurnosPorAgenda } from "../models/turnoModel.js"
 import { traerDias } from "../models/diaModel.js"
 import { crearConfigAgenda } from "../models/configuracion_agendaModel.js"
 import { insertarHorarioCompleto, traerHxAgenda } from "../models/horarioModel.js"
@@ -67,8 +67,11 @@ export const listarTurno = async (req,res)=>{
 export const traerAgenda = async (req,res)=>{
     try {
         const {id_agenda} = req.params
+        const turnos = await listarTurnosPorAgenda(id_agenda)
+        console.log("KJFDSJAJSDFJDSAIFJDSAJFIDOSJAOFIJDSOIAFJDIOSJAFIDJSIAFJDIOSAJFOIDSA")
+        console.log(turnos)
         const agenda = await traerHxAgenda(id_agenda)
-        return res.json(agenda)
+        return res.json({agenda,turnos})
     } catch (error) {
         console.error("Error traerAgenda",error)
     }

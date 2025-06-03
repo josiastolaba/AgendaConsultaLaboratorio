@@ -13,10 +13,11 @@ function cargarCalendario(){
                     return response.json()
                 })
                 .then(function(data){
-                    console.log(data)
+                    console.log(data.agenda)
+                    console.log(data.turnos)
                     const eventos = []
                     let events = eventos
-                    let datos = data.map(function(event){
+                    let datos = data.agenda.map(function(event){
                         const fechaActual = new Date()
                         const fechaFin = new Date(fechaActual)
                         fechaFin.setMonth(fechaFin.getMonth() + 2)
@@ -26,24 +27,30 @@ function cargarCalendario(){
                             //console.log(fechaActual.getDay(),"--",event.id_dia)
                             //console.log(event)
                             if(fechaActual.getDay() === (event.id_dia - 1)){
-                                const [horasIM,minutosIM] = event.hora_inicio_m.split(":").map(Number)
-                                const [horasFM,minutosFM] = event.hora_fin_m.split(":").map(Number)
-                                let horaInicioM = new Date()
-                                let horaFinM = new Date()
-                                horaInicioM.setHours(horasIM,minutosIM,0,0)
-                                horaFinM.setHours(horasFM,minutosFM,0,0)
-                                while(horaInicioM < horaFinM){
-                                    eventos.push({
-                                        title: ".",
-                                        start: new Date(fechaActual),
-                                        end: new Date(fechaActual),
-                                        url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horaFinM}&fecha=${fechaActual}`,
-                                        location: event.eventLocation || "",
-                                        timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes(),
-                                        timeEnd: horaFinM.getHours()+":"+horaFinM.getMinutes(),
-                                        
-                                    })
-                                    horaInicioM.setMinutes(horaInicioM.getMinutes() + Number(event.intervalo_turno))
+                                if(event.hora_inicio_m && event.hora_fin_m){
+                                    const [horasIM,minutosIM] = event.hora_inicio_m.split(":").map(Number)
+                                    const [horasFM,minutosFM] = event.hora_fin_m.split(":").map(Number)
+                                    let horaInicioM = new Date()
+                                    let horaFinM = new Date()
+                                    horaInicioM.setHours(horasIM,minutosIM,0,0)
+                                    horaFinM.setHours(horasFM,minutosFM,0,0)
+                                    let horafinturnoM = new Date()
+                                    while(horaInicioM < horaFinM){
+                                        horafinturnoM.setHours(horaInicioM.getHours(),horaInicioM.getMinutes(),0,0)
+                                        horafinturnoM.setMinutes(horafinturnoM.getMinutes() + Number(event.intervalo_turno))
+                                        eventos.push({
+                                            classNames: ['text-danger'],
+                                            title: ".",
+                                            start: new Date(fechaActual),
+                                            end: new Date(fechaActual),
+                                            url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horafinturnoM}&fecha=${fechaActual}`,
+                                            location: event.eventLocation || "",
+                                            timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes(),
+                                            timeEnd: horafinturnoM.getHours()+":"+horafinturnoM.getMinutes(),
+                                        })
+                                        horaInicioM.setMinutes(horaInicioM.getMinutes() + Number(event.intervalo_turno))
+
+                                    }
                                 }
                                 if(event.horario_inicio_t && event.horario_fin_t){
                                     const [horasIT,minutosIT] = event.horario_inicio_t.split(":").map(Number)
@@ -52,16 +59,18 @@ function cargarCalendario(){
                                     let horaFinT = new Date()
                                     horaInicioT.setHours(horasIT,minutosIT,0,0)
                                     horaFinT.setHours(horasFT,minutosFT,0,0)
+                                    let horafinturnoT = new Date()
                                     while(horaInicioT < horaFinT){
+                                        horafinturnoT.setHours(horaInicioT.getHours(),horaInicioT.getMinutes(),0,0)
+                                        horafinturnoT.setMinutes(horafinturnoT.getMinutes() + Number(event.intervalo_turno))
                                         eventos.push({
                                             title: ".",
                                             start: new Date(fechaActual),
                                             end: new Date(fechaActual),
-                                            url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horaFinT}&fecha=${fechaActual}`,
+                                            url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual}`,
                                             location: event.eventLocation || "",
                                             timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes(),
-                                            timeEnd: horaFinT.getHours()+":"+horaFinT.getMinutes(),
-                                        
+                                            timeEnd: horafinturnoT.getHours()+":"+horafinturnoT.getMinutes(),
                                         })
                                     horaInicioT.setMinutes(horaInicioT.getMinutes() + Number(event.intervalo_turno))
                                     }
