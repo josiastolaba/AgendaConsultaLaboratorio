@@ -38,15 +38,16 @@ function cargarCalendario(){
                                     while(horaInicioM < horaFinM){
                                         horafinturnoM.setHours(horaInicioM.getHours(),horaInicioM.getMinutes(),0,0)
                                         horafinturnoM.setMinutes(horafinturnoM.getMinutes() + Number(event.intervalo_turno))
+                                        const infoTurno = getInfoDelTurno(horaInicioM.getHours()+":"+horaInicioM.getMinutes().toString().padStart(2, '0')+":00", fechaActual, data.turnos)
                                         eventos.push({
-                                            classNames: ['text-danger'],
+                                            classNames: [infoTurno.clase],
                                             title: ".",
                                             start: new Date(fechaActual),
                                             end: new Date(fechaActual),
-                                            url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horafinturnoM}&fecha=${fechaActual}`,
+                                            url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horafinturnoM}&fecha=${fechaActual.toString()}${infoTurno.id_turno ? `&id_turno=${infoTurno.id_turno}` : ""}`,
                                             location: event.eventLocation || "",
-                                            timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes(),
-                                            timeEnd: horafinturnoM.getHours()+":"+horafinturnoM.getMinutes(),
+                                            timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes().toString().padStart(2, '0'),
+                                            timeEnd: horafinturnoM.getHours()+":"+horafinturnoM.getMinutes().toString().padStart(2, '0'),
                                         })
                                         horaInicioM.setMinutes(horaInicioM.getMinutes() + Number(event.intervalo_turno))
 
@@ -63,20 +64,20 @@ function cargarCalendario(){
                                     while(horaInicioT < horaFinT){
                                         horafinturnoT.setHours(horaInicioT.getHours(),horaInicioT.getMinutes(),0,0)
                                         horafinturnoT.setMinutes(horafinturnoT.getMinutes() + Number(event.intervalo_turno))
+                                        const infoTurno = getInfoDelTurno(horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0')+":00", fechaActual, data.turnos)
                                         eventos.push({
+                                            classNames: [infoTurno.clase],
                                             title: ".",
                                             start: new Date(fechaActual),
                                             end: new Date(fechaActual),
-                                            url:`/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual}`,
+                                            url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual.toString()}${infoTurno.id_turno ? `&id_turno=${infoTurno.id_turno}` : ""}`,
                                             location: event.eventLocation || "",
-                                            timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes(),
-                                            timeEnd: horafinturnoT.getHours()+":"+horafinturnoT.getMinutes(),
+                                            timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0'),
+                                            timeEnd: horafinturnoT.getHours()+":"+horafinturnoT.getMinutes().toString().padStart(2, '0'),
                                         })
-                                    horaInicioT.setMinutes(horaInicioT.getMinutes() + Number(event.intervalo_turno))
+                                        horaInicioT.setMinutes(horaInicioT.getMinutes() + Number(event.intervalo_turno))
                                     }
                                 }
-                                
-                                
                             }
                             fechaActual.setDate(fechaActual.getDate() + 1)
                         }
@@ -90,7 +91,6 @@ function cargarCalendario(){
                 })
         },
         eventContent: function(info){
-            console.log("Hola Mundo!")
             return {
                 html: `
                 <div style="overflow: hidden;margin-top:5px; font-size: 20px; positon: relative;  cursor: pointer; font-family: 'Inter', sans-serif;">
@@ -125,20 +125,49 @@ function cargarCalendario(){
                 >
                     <strong>${newElTitle}</strong>
                     <div>Location: ${newElLocation}</div>
-
                 </div>-->
             `
             el.after(newEl)
         },
-
         eventMouseLeave: function(){
-            document.querySelector(".fc-hoverable-event").remove()
+            const hoverEl = document.querySelector(".fc-hoverable-event");
+            if (hoverEl) hoverEl.remove();
         }
     });
     
     calendar.render();
 }
+function getInfoDelTurno(hora, fecha, turnos) {
+    try {
+        for (let i = 0; i < turnos.length; i++) {
+        const turno = turnos[i];
+        const fechaTurno = new Date(turno.fecha);
+        if (
+            turno.inicio_turno === hora &&
+            fechaTurno.getDate() === fecha.getDate() &&
+            fechaTurno.getMonth() === fecha.getMonth() &&
+            fechaTurno.getFullYear() === fecha.getFullYear()
+        ) {
+            return {
+                clase: getClaseEstado(turno.id_estado_turno),
+                id_turno: turno.id_turno
+            };
+        }
+        }
+        return {
+        clase: 'text-primary',
+        id_turno: null
+        };
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-function saludo(){
-    console.log("HOLA MUNDO!!")
+function getClaseEstado(id_estado_turno) {
+    switch (id_estado_turno) {
+        case 2: return 'text-secondary';
+        case 3: return 'text-success';
+        case 4: return 'text-danger';
+        default: return 'text-primary';
+    }
 }

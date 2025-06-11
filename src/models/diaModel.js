@@ -60,15 +60,15 @@ export const modificarDiaPorId = async() => {
 }
 
 export const borrarDia = async (id_dia) =>{
-try{
-    const consulta= `
-    DELETE FROM dias
-    WHERE id_dia = ?
-    `
-    const [resultado] = await connection.execute(consulta,[id_dia])
-         return resultado
+    try{
+        const consulta= `
+        DELETE FROM dias
+        WHERE id_dia = ?
+        `
+        const [resultado] = await connection.execute(consulta,[id_dia])
+            return resultado
 
-}catch (error){
-    console.error("Error para borrar dia", error)
-}
+    }catch (error){
+        console.error("Error para borrar dia", error)
+    }
 }

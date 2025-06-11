@@ -7,6 +7,23 @@ const horaFinTarde = document.getElementById("hora_fin_tarde")
 const fechaInicio = document.getElementById("fecha_inicio")
 const fechaFin = document.getElementById("fecha_fin")
 
+function enviarAccionTurno(accion) {
+    const idTurno = document.getElementById('id_turno').value;
+
+    if (!idTurno) {
+        alert('El ID del turno no está definido.');
+        return;
+    }
+    const form = document.getElementById('formAccionTurno');
+    document.getElementById('formAccion_id_turno').value = idTurno;
+    form.action = `/turno/${accion}`; // irá a /turno/confirmar o /turno/cancelar
+    form.submit();
+}
+
+function mostrarFormulario() {
+    document.getElementById('formularioTurno').classList.remove('d-none');
+}
+
 const siguienteSeccion = (seccionActual,id_seccion) => {
     seccionActual.parentElement.classList.add("d-none")
     const nextSection = document.getElementById(id_seccion)

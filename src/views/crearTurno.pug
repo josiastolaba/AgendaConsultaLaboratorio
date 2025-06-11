@@ -1,7 +1,18 @@
 extends layout
 
 block content
-    .contenedorForm
+    .contenedorBotones.mb-3
+        button#btnReservar.btn.btn-primary(type="button" onclick="mostrarFormulario()") Reservar
+
+        form.allforms#formConfirmar(action="/turno/confirmar" method="POST" class="d-inline")
+            input(type="hidden" name="id_turno" id="idTurnoConfirmar")
+            button#btnConfirmar.btn.btn-success(type="submit") Confirmar
+
+        form.allforms#formCancelar(action="/turno/cancelar" method="POST" class="d-inline")
+            input(type="hidden" name="id_turno" id="idTurnoCancelar")
+            button#btnCancelar.btn.btn-danger(type="submit") Cancelar
+
+    .contenedorForm.d-none#formularioTurno
         form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
             .mb-3
                 label(for="motivo" class="form-label") Motivo
@@ -16,4 +27,25 @@ block content
                         option(value=paciente.dni) #{paciente.nombre} #{paciente.apellido}
                 .invalid-feedback Es obligatorio seleccionar un paciente.
             input#id_turno(name="id_turno" type="hidden" value="")
+            input#estado_turno(type="hidden" name="estado_turno" value="")
             button.btn.btn-primary(type="submit") Guardar
+
+    script(src="/validaciones.js")
+
+    script.
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const idTurno = urlParams.get('id_turno');
+
+        if (idTurno) {
+            document.getElementById('idTurnoConfirmar').value = idTurno;
+            document.getElementById('idTurnoCancelar').value = idTurno;
+            document.getElementById('btnReservar').disabled = true;
+        }
+        if (!idTurno) {
+        document.getElementById('idTurnoConfirmar').value = idTurno;
+        document.getElementById('idTurnoCancelar').value = idTurno;
+
+        document.getElementById('btnConfirmar').disabled = true;
+        document.getElementById('btnCancelar').disabled = true;
+        }
