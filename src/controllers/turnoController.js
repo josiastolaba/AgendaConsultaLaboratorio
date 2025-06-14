@@ -1,6 +1,6 @@
 import { obtenerTodasLasAgendasPorMatricula, obtenerTodosAgendasActuales } from "../models/agendaModel.js";
 import { obtenerTodosLosPacientes } from "../models/personaModel.js";
-import { darTurno, listarTurnosPorAgenda,confirmar,cancelar,insertTurno} from "../models/turnoModel.js";
+import { darTurno, listarTurnosPorAgenda,confirmar,cancelar,insertTurno,listarTodosTurnosPorAgenda} from "../models/turnoModel.js";
 
 export const getTurno = async (req,res)=>{
     try {
@@ -14,7 +14,7 @@ export const getTurno = async (req,res)=>{
 
 export const getTurno2 = async (req,res)=>{
     try{
-        const turnos = await listarTurnosPorAgenda(req.params.id_agenda);
+        const turnos = await listarTodosTurnosPorAgenda(req.params.id_agenda);
         console.log(turnos);
         res.json(turnos);
       }catch(error){
@@ -36,7 +36,6 @@ export const reservarTurno = async(req,res)=>{
         console.error("Error reservarTurno", error);
     }
 }
-
 
 export const traerTurnos = async (req,res)=>{
     try {

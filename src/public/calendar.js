@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded',cargarCalendario)
 let request_calendar = "/events.json"
 function cargarCalendario(){
-
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        
         events:function(info, successCallback, failureCallback){
             fetch("http://localhost:3000/agendas/getAgenda/" + document.getElementById("agenda").value)
                 .then(function(response){
@@ -13,8 +11,6 @@ function cargarCalendario(){
                     return response.json()
                 })
                 .then(function(data){
-                    console.log(data.agenda)
-                    console.log(data.turnos)
                     const eventos = []
                     let events = eventos
                     let datos = data.agenda.map(function(event){
@@ -24,8 +20,6 @@ function cargarCalendario(){
                         fechaFin.setDate(1)
                         fechaFin.setDate(fechaFin.getDate() - 1)
                         while(fechaActual <= fechaFin){
-                            //console.log(fechaActual.getDay(),"--",event.id_dia)
-                            //console.log(event)
                             if(fechaActual.getDay() === (event.id_dia - 1)){
                                 if(event.hora_inicio_m && event.hora_fin_m){
                                     const [horasIM,minutosIM] = event.hora_inicio_m.split(":").map(Number)
@@ -50,7 +44,6 @@ function cargarCalendario(){
                                             timeEnd: horafinturnoM.getHours()+":"+horafinturnoM.getMinutes().toString().padStart(2, '0'),
                                         })
                                         horaInicioM.setMinutes(horaInicioM.getMinutes() + Number(event.intervalo_turno))
-
                                     }
                                 }
                                 if(event.horario_inicio_t && event.horario_fin_t){
@@ -62,6 +55,7 @@ function cargarCalendario(){
                                     horaFinT.setHours(horasFT,minutosFT,0,0)
                                     let horafinturnoT = new Date()
                                     while(horaInicioT < horaFinT){
+                                        
                                         horafinturnoT.setHours(horaInicioT.getHours(),horaInicioT.getMinutes(),0,0)
                                         horafinturnoT.setMinutes(horafinturnoT.getMinutes() + Number(event.intervalo_turno))
                                         const infoTurno = getInfoDelTurno(horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0')+":00", fechaActual, data.turnos)
@@ -81,7 +75,6 @@ function cargarCalendario(){
                             }
                             fechaActual.setDate(fechaActual.getDate() + 1)
                         }
-                        console.log(eventos)
                         return eventos
                     })
                     successCallback(events)
@@ -111,7 +104,6 @@ function cargarCalendario(){
         },
 
         eventMouseEnter: function(mouseEnterInfo){
-            console.log(mouseEnterInfo)
             let el = mouseEnterInfo.el
             el.classList.add("relative")
 
@@ -134,16 +126,16 @@ function cargarCalendario(){
             if (hoverEl) hoverEl.remove();
         }
     });
-    
     calendar.render();
 }
 function getInfoDelTurno(hora, fecha, turnos) {
     try {
+        const horaCompleta = normalizarHora(hora)
         for (let i = 0; i < turnos.length; i++) {
         const turno = turnos[i];
         const fechaTurno = new Date(turno.fecha);
         if (
-            turno.inicio_turno === hora &&
+            turno.inicio_turno === horaCompleta &&
             fechaTurno.getDate() === fecha.getDate() &&
             fechaTurno.getMonth() === fecha.getMonth() &&
             fechaTurno.getFullYear() === fecha.getFullYear()
@@ -161,6 +153,11 @@ function getInfoDelTurno(hora, fecha, turnos) {
     } catch (error) {
         console.log(error)
     }
+}
+
+function normalizarHora(h) {
+    const [hh, mm, ss = '00'] = h.split(":");
+    return `${hh.padStart(2, '0')}:${mm.padStart(2, '0')}:${ss.padStart(2, '0')}`;
 }
 
 function getClaseEstado(id_estado_turno) {
