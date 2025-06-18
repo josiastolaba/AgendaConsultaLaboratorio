@@ -1,44 +1,62 @@
-const card=`<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+let cont = 1
+const card=
+`<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
   <div class="card-header">Header</div>
   <div class="card-body">
-    
   </div>
 </div>`
-const htmlHorarioManiana = `<div class="turno">
+const htmlHorarioManiana = 
+    `<div class="turno">
       <h2>Turno Mañana</h2>
       <div class="form-group">
         <label for="inicioManana">Inicio:</label>
-        <input type="time" class="inicioManana" name="inicioManana" required>
+        <input id=horario${cont++} class="inicioManana" name="inicioManana" required>
       </div>
       <div class="form-group">
         <label for="finManana">Fin:</label>
-        <input type="time" class="finManana" name="finManana" required>
+        <input id=horario${cont++} class="finManana" name="finManana" required>
       </div>
     </div>`
-    const htmlHorarioTarde= `<div class="turno">
+const htmlHorarioTarde = 
+    `<div class="turno">
       <h2>Turno Tarde</h2>
       <div class="form-group">
         <label for="inicioTarde">Inicio:</label>
-        <input type="time" class="inicioTarde" name="inicioTarde" required>
+        <input id=horario${cont++} class="inicioTarde" name="inicioTarde" required>
       </div>
       <div class="form-group">
         <label for="finTarde">Fin:</label>
-        <input type="time" class="finTarde" name="finTarde" required>
+        <input id=horario${cont++} class="finTarde" name="finTarde" required>
       </div>
     </div>`
+function formatInput(){
+  for(i=0;i<=cont;i++){
+      flatpickr("#horario"+i,{
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",        // Formato 24h
+        time_24hr: true,
+        minuteIncrement: 10       // Intervalos de 10 minutos
+    });
+  }
+}
+
+
 const manejarDia =()=> {
-    const dias = getDiaSelec()
+  const dias = getDiaSelec()
    const elementDiv = document.getElementById("containerDia")
    elementDiv.innerHTML= " "
    dias.forEach(dia=>{ 
-    elementDiv.innerHTML+= `<div class="card bg-primary mb-3 turnoDia" id_dia=${dia.valor} style="max-width: 18rem;">
-  <div class="card-header">${dia.nombre_dia}</div>
-  <div class="card-body">
-    ${(dia.turno ==="mañana") ? htmlHorarioManiana : " "}
-     ${(dia.turno ==="tarde") ? htmlHorarioTarde : " "}
-      ${(dia.turno ==="ambos") ? htmlHorarioManiana.concat(htmlHorarioTarde) : " "}
-  </div>
-</div>`})
+    elementDiv.innerHTML+= 
+  `<div class="card bg-primary mb-3 turnoDia" id_dia=${dia.valor} style="max-width: 18rem;">
+    <div class="card-header">${dia.nombre_dia}</div>
+    <div class="card-body">
+      ${(dia.turno ==="mañana") ? htmlHorarioManiana : " "}
+      ${(dia.turno ==="tarde") ? htmlHorarioTarde : " "}
+        ${(dia.turno ==="ambos") ? htmlHorarioManiana.concat(htmlHorarioTarde) : " "}
+    </div>
+  </div>`})
+  formatInput()
 }
 
 const getDiaSelec = ()=>{

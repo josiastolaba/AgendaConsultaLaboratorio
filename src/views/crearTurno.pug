@@ -11,6 +11,10 @@ block content
         form.allforms#formCancelar(action="/turno/cancelar" method="POST" class="d-inline")
             input(type="hidden" name="id_turno" id="idTurnoCancelar")
             button#btnCancelar.btn.btn-danger(type="submit") Cancelar
+        
+        form.allforms#formSobreturno(action="/turno/sobreturno" method="POST" class="d-inline")
+            input(type="hidden" name="id_turno" id="idTurnoSObreturno")
+            button#btnCancelar.btn.btn-danger(type="submit") Sobre Turno
 
     .contenedorForm.d-none#formularioTurno
         form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")

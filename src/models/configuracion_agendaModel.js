@@ -17,13 +17,10 @@ export const crearConfigAgenda = async (intervalo_turno, max_sobreturno) => {
 
 export const traerConfigAgendaPorId = async (id_configuracion) =>{
     try{
-        const consulta = `
-          SELECT * FROM configuracion_agenda
-        `
-
+        const consulta = 
+        `SELECT * FROM configuracion_agenda`
         const [resultado] = await connection.execute(consulta,[id_configuracion])
           return resultado
-
     }catch (error) {
         console.error("Error al traer la configuracion de la agenda", error)
     }
@@ -31,15 +28,11 @@ export const traerConfigAgendaPorId = async (id_configuracion) =>{
 
 export const traerMaxSobreTurno = async (id_configuracion) =>{
     try{
-        const consulta = `
-          SELECT max_sobreturno FROM configuracion_agenda
-          WHERE id_configuracion= ?
-
-        `
-
+        const consulta = 
+        `SELECT max_sobreturno FROM configuracion_agenda
+          WHERE id_configuracion= ?`
         const [resultado] = await connection.execute(consulta,[id_configuracion])
           return resultado
-
     }catch (error) {
         console.error("Error al traer max sobreturno de  configuracion de agenda", error)
     }
@@ -51,8 +44,7 @@ export const modifMaxSobreTurno = async (id_configuracion, max_sobreturno) => {
         const consulta = `
           UPDATE configuracion_agenda
           SET max_sobreturno = ?
-          WHERE id_configuracion = ?
-        `
+          WHERE id_configuracion = ?`
         const [resultado] = await connection.execute(consulta,[id_configuracion, max_sobreturno])
           return resultado
     }catch (error){
@@ -65,8 +57,7 @@ export const modifIntervaloTurno = async (id_configuracion, intervalo_turno) => 
         const consulta = `
           UPDATE configuracion_agenda
           SET intervalo_turno = ?
-          WHERE id_configuracion = ?
-        `
+          WHERE id_configuracion = ?`
         const [resultado] = await connection.execute(consulta,[id_configuracion, intervalo_turno])
           return resultado
     }catch (error){

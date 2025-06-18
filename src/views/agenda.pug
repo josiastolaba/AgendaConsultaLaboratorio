@@ -44,8 +44,8 @@ block content
                 button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p5final')") Siguiente Sección
             #p5final.d-none
                 .mb-3
-                            label(for="intervalo_turno").form-label Intervalo de Turno
-                            input#intervalo_turno.form-control(type="time" name="intervalo_turno" required step="600")
+                    label(for="intervalo_turno").form-label Intervalo de Turno
+                    input#intervalo_turno.form-control(name="intervalo_turno" required step="600")
                 .mb-3
                     label(for="max_sobreTurno").form-label Máximo Sobreturno
                     input#max_sobreTurno.form-control(type="number" name="max_sobreTurno" min="0" required)
@@ -87,3 +87,11 @@ block content
     script.
         let table = new DataTable('#turnoTable');
     script(src="/selecDias.js")
+    script.
+        flatpickr("#intervalo_turno", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // 24h format
+            time_24hr: true,
+            minuteIncrement: 10
+        });
