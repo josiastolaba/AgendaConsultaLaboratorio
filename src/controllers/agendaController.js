@@ -32,12 +32,17 @@ export const guardarAgenda = async(req,res)=>{
         const clasificaciones = await obtenerTodasLasClasificaciones();
         const dias = await traerDias();
         let {idSucursal,idMatricula,intervalo,sobreturno,estadoAgenda,idClasificacion,descripcion,horarioSelec} = req.body;
-        const id_configuracion = await crearConfigAgenda(intervalo,sobreturno);
+        let hora = req.body.intervalo; // "00:30" o "01:00"
+        let [hh, mm] = hora.split(":").map(Number);
+        let minutos = (hh * 60) + mm; // 0*60 + 30 = 30
+        const id_configuracion = await crearConfigAgenda(minutos,sobreturno);
+        console.log(minutos)
         for (const horario of horarioSelec){
             let id_horario = await insertarHorarioCompleto(horario.inicioManana, horario.finManana, horario.inicioTarde, horario.finTarde);
             await relacionDiaHorario(horario.id_dia,id_horario,id_configuracion);
         };
         console.log(req.body)
+        
         const resultado = await insertarAgenda(estadoAgenda, idMatricula, idSucursal, descripcion,idClasificacion,id_configuracion);
         //res.render('agenda', {agendaCreada: true, usuario: req.session.usuario,matriculas,sucursales,clasificaciones,agendas,dias})
         res.status(302).redirect('/agendas/crearAgenda');

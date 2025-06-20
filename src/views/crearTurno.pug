@@ -4,17 +4,19 @@ block content
     .contenedorBotones.mb-3
         button#btnReservar.btn.btn-primary(type="button" onclick="mostrarFormulario()") Reservar
 
-        form.allforms#formConfirmar(action="/turno/confirmar" method="POST" class="d-inline")
+        //form.allforms#formConfirmar(action="/turno/confirmar" method="POST" class="d-inline")
             input(type="hidden" name="id_turno" id="idTurnoConfirmar")
             button#btnConfirmar.btn.btn-success(type="submit") Confirmar
 
-        form.allforms#formCancelar(action="/turno/cancelar" method="POST" class="d-inline")
+        //form.allforms#formCancelar(action="/turno/cancelar" method="POST" class="d-inline")
             input(type="hidden" name="id_turno" id="idTurnoCancelar")
             button#btnCancelar.btn.btn-danger(type="submit") Cancelar
         
-        form.allforms#formSobreturno(action="/turno/sobreturno" method="POST" class="d-inline")
-            input(type="hidden" name="id_turno" id="idTurnoSObreturno")
-            button#btnCancelar.btn.btn-danger(type="submit") Sobre Turno
+        button#btnSobreturno.btn.btn-primary(type="button" onclick="mostrarFormulario()") Sobre Turno
+        
+        //form.allforms#formSobreturno(action="/turno/sobreturno" method="POST" class="d-inline")
+            input(type="hidden" name="id_turno" id="idTurnoSobreturno")
+            button#btnSobreturno.btn.btn-danger(type="submit") Sobre Turno
 
     .contenedorForm.d-none#formularioTurno
         form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
@@ -37,19 +39,21 @@ block content
     script(src="/validaciones.js")
 
     script.
-
         const urlParams = new URLSearchParams(window.location.search);
         const idTurno = urlParams.get('id_turno');
 
         if (idTurno) {
-            document.getElementById('idTurnoConfirmar').value = idTurno;
-            document.getElementById('idTurnoCancelar').value = idTurno;
+            //document.getElementById('idTurnoConfirmar').value = idTurno;
+            //document.getElementById('idTurnoCancelar').value = idTurno;
+            document.getElementById('btnSobreturno').value = idTurno;
             document.getElementById('btnReservar').disabled = true;
         }
-        if (!idTurno) {
-        document.getElementById('idTurnoConfirmar').value = idTurno;
-        document.getElementById('idTurnoCancelar').value = idTurno;
 
-        document.getElementById('btnConfirmar').disabled = true;
-        document.getElementById('btnCancelar').disabled = true;
+        if (!idTurno) {
+            //document.getElementById('idTurnoConfirmar').value = idTurno;
+            //document.getElementById('idTurnoCancelar').value = idTurno;
+
+            document.getElementById('btnSobreturno').disabled = true;
+            //document.getElementById('btnConfirmar').disabled = true;
+            //document.getElementById('btnCancelar').disabled = true;
         }
