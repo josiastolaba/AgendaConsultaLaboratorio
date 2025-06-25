@@ -86,3 +86,17 @@ export const insertTurno = async(inicio_turno,fin_turno,motivo_consulta, dni,id_
         console.error("Error insertTurno", error)
     }
 }
+
+export const selecTurno = async(id_turno)=>{
+    try {
+        const consulta = `
+            SELECT inicio_turno, fin_turno, id_estado_turno, motivo_consulta, dni, id_agenda, fecha, sobreturno 
+            FROM turno 
+            WHERE turno.id_turno = ?
+        `
+        const [resultado] = await connection.execute(consulta,[id_turno])
+        return resultado[0]
+    } catch (error) {
+        console.error("Error selecTurno", error)
+    }
+}

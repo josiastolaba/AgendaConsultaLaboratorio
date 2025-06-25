@@ -1,6 +1,6 @@
 import { obtenerTodasLasAgendasPorMatricula, obtenerTodosAgendasActuales } from "../models/agendaModel.js";
 import { obtenerTodosLosPacientes } from "../models/personaModel.js";
-import { darTurno, listarTurnosPorAgenda,confirmar,cancelar,insertTurno,listarTodosTurnosPorAgenda} from "../models/turnoModel.js";
+import { selecTurno,darTurno,listarTurnosPorAgenda,confirmar,cancelar,insertTurno,listarTodosTurnosPorAgenda} from "../models/turnoModel.js";
 
 export const getTurno = async (req,res)=>{
     try {
@@ -17,9 +17,18 @@ export const getTurno2 = async (req,res)=>{
         const turnos = await listarTodosTurnosPorAgenda(req.params.id_agenda);
         console.log(turnos);
         res.json(turnos);
-      }catch(error){
+    }catch(error){
         console.log(error);
-      }
+    }
+}
+
+export const traerTurno = async (req,res)=>{
+    try{
+        const turno = await selecTurno(req.params.id_turno);
+        res.json(turno);
+    }catch(error){
+        console.log(error);
+    }
 }
 
 export const reservarTurno = async(req,res)=>{
@@ -87,8 +96,10 @@ export const updateCancelar = async(req,res)=>{
 
 export const llevarTurno =  async (req, res) => {
     try {
-        const { id_agenda, hora_inicio, hora_fin, fecha } = req.query;
+        const { id_agenda, hora_inicio, hora_fin, fecha, id_turno} = req.query;
         const pacientes = await obtenerTodosLosPacientes();
+        let turno = ""
+        if (id_turno) turno = await selecTurno(id_turno)
         req.session.agenda={ id_agenda, hora_inicio, hora_fin, fecha };
         req.session.save((error) => {
                 if (error) {
@@ -96,9 +107,8 @@ export const llevarTurno =  async (req, res) => {
                     return res.status(500).send('Error al guardar sesión');
                 } else {
                     console.log('Sesión guardada con éxito ', req.session.usuario);
-                    //res.render('index', { usuario: req.session.usuario });
                     console.log(id_agenda, hora_inicio, hora_fin, fecha);
-                    return res.render('crearTurno',{usuario: req.session.usuario,pacientes});
+                    return res.render('crearTurno',{usuario: req.session.usuario,pacientes,turno});
                 }
         });
     } catch (error) {

@@ -1,22 +1,33 @@
 extends layout
 
 block content
-    .contenedorBotones.mb-3
-        button#btnReservar.btn.btn-primary(type="button" onclick="mostrarFormulario()") Reservar
-
-        //form.allforms#formConfirmar(action="/turno/confirmar" method="POST" class="d-inline")
-            input(type="hidden" name="id_turno" id="idTurnoConfirmar")
-            button#btnConfirmar.btn.btn-success(type="submit") Confirmar
-
-        //form.allforms#formCancelar(action="/turno/cancelar" method="POST" class="d-inline")
-            input(type="hidden" name="id_turno" id="idTurnoCancelar")
-            button#btnCancelar.btn.btn-danger(type="submit") Cancelar
-        
-        button#btnSobreturno.btn.btn-primary(type="button" onclick="mostrarFormulario()") Sobre Turno
-        
-        //form.allforms#formSobreturno(action="/turno/sobreturno" method="POST" class="d-inline")
-            input(type="hidden" name="id_turno" id="idTurnoSobreturno")
-            button#btnSobreturno.btn.btn-danger(type="submit") Sobre Turno
+    .contenedorBotones.mb-3#botones
+        case turno.id_estado_turno
+            when 2
+                h3 Reservado
+                button#btnConfirmar.btn.confirmado(type="button" onclick="mostrarFormulario()") Confirmar
+                button#btnCancelar.btn.cancelado(type="button" onclick="mostrarFormulario()") Cancelar
+            when 3
+                h3 Confirmado
+                button#btnCancelar.btn.cancelado(type="button" onclick="mostrarFormulario()") Cancelar
+                button#btnPresente.btn.presente(type="button" onclick="mostrarFormulario()") Presente
+                button#btnAusente.btn.ausente(type="button" onclick="mostrarFormulario()") Ausente
+            when 4
+                h3 Cancelado
+            when 5
+                h3 Ausente
+            when 6
+                h3 Presente
+                button#btnEnConsulta.btn.en-consulta(type="button" onclick="mostrarFormulario()") En Consulta
+            when 7
+                h3 En consulta
+                button#btnAtendido.btn.atendido(type="button" onclick="mostrarFormulario()") Atendido
+            when 8
+                h3 Atendido
+            default 
+                h3 Libre
+                button#btnReservar.btn.reservado(type="button" onclick="mostrarFormulario()") Reservar
+                button#btnSobreturno.btn.sobreturno(type="button" onclick="mostrarFormulario()") Sobre Turno
 
     .contenedorForm.d-none#formularioTurno
         form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
@@ -37,23 +48,3 @@ block content
             button.btn.btn-primary(type="submit") Guardar
 
     script(src="/validaciones.js")
-
-    script.
-        const urlParams = new URLSearchParams(window.location.search);
-        const idTurno = urlParams.get('id_turno');
-
-        if (idTurno) {
-            //document.getElementById('idTurnoConfirmar').value = idTurno;
-            //document.getElementById('idTurnoCancelar').value = idTurno;
-            document.getElementById('btnSobreturno').value = idTurno;
-            document.getElementById('btnReservar').disabled = true;
-        }
-
-        if (!idTurno) {
-            //document.getElementById('idTurnoConfirmar').value = idTurno;
-            //document.getElementById('idTurnoCancelar').value = idTurno;
-
-            document.getElementById('btnSobreturno').disabled = true;
-            //document.getElementById('btnConfirmar').disabled = true;
-            //document.getElementById('btnCancelar').disabled = true;
-        }

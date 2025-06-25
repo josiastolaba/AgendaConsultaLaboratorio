@@ -157,3 +157,32 @@ h1.text-center {
 .fc-daygrid-event-harness {
     width: 100%;
 }
+
+.libre{
+    background-color:#3EDBB7 
+}
+.reservado{
+    background-color:#2A6F8E 
+}
+.confirmado{
+    background-color:#0057D9
+}
+.cancelado{
+    background-color:#B00020
+}
+.ausente{
+    background-color:#E67E22
+}
+.presente{
+    background-color:#7ED957 
+}
+.en-consulta{
+    background-color:#263859
+}
+.atendido{
+    background-color:#C1B6DC 
+}
+.sobreturno{
+    background-color:#4800ff 
+}
+

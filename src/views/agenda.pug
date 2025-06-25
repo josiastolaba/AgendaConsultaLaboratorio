@@ -5,65 +5,65 @@ block content
         h2.mb-4 Crear Nueva Agenda
         if(agendaCreada)
             h2 Se creó la agenda
-        form.allforms(action="/agendas/crearAgenda" method="POST" style="height:750px; width: 1500px; ")
+        form.allforms(action="/agendas/crearAgenda" method="POST" style="height:600px;")
             - const today = new Date().toISOString().split('T')[0]
             #p1sucursal(style="width: 1500px")
                 each dia in dias
                     .dia.dia_espanol
                         //- Checkbox para seleccionar el día
-                        label(for=dia.dia_espanol)
-                        input(type="checkbox", id=dia.dia_espanol, name="dias", value=dia.id_dia, nombre_dia = dia.dia_espanol)
+                        label.form-check-label(for=dia.dia_espanol)
+                        input.form-check-input(type="checkbox", id=dia.dia_espanol, name="dias", value=dia.id_dia, nombre_dia = dia.dia_espanol)
                         |  #{dia.dia_espanol}
                         //- Menú desplegable para elegir el turno asociado al día
-                        select(name=`turno_${dia.id_dia}`)
+                        select.form-select(style="width: 200px;",name=`turno_${dia.id_dia}`)
                             option(value="") Selecciona turno
                             option(value="mañana") Mañana
                             option(value="tarde") Tarde
                             option(value="ambos") Ambos
                 br
-                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p2sucursal'), manejarDia()") Siguiente Sección
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p2sucursal'), manejarDia()" style="position: absolute; bottom: 310px; right: 130px;") Siguiente Sección
             #p2sucursal.d-none
                 #containerDia.d-flex.justify-content-around
-                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p1sucursal')") Sección Anterior
-                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p3sucursal'), cardDias()") Siguiente Sección
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p1sucursal')" style="position: absolute; bottom: 310px; right: 1080px;") Sección Anterior
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p3sucursal'), cardDias()" style="position: absolute; bottom: 310px; right: 130px;") Siguiente Sección
             #p3sucursal.d-none
                 .mb-3
                     label(for="id_sucursal").form-label Sucursal
-                    select#id_sucursal.form-select(name="id_sucursal" required)
+                    select#id_sucursal.form-select(style="width: 1080x;",name="id_sucursal" required)
                         each sucursal in sucursales
                             option(value=sucursal.id_sucursal) #{sucursal.nombre_sucursal} - #{sucursal.direccion_sucursal}
-                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p2sucursal')") Sección Anterior
-                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p4matricula')") Siguiente Sección
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p2sucursal')" style="position: absolute; bottom: 310px; right: 1080px;") Sección Anterior
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p4matricula')" style="position: absolute; bottom: 310px; right: 130px;") Siguiente Sección
             #p4matricula.d-none
                 .mb-3
                     label(for="matricula").form-label Matrícula
-                    select#matricula.form-select(name="matricula" required)
+                    select#matricula.form-select(style="width: 1080x;",name="matricula" required)
                         each matricula in matriculas
                             option(value=matricula.matricula) #{matricula.matricula} - #{matricula.nombre} #{matricula.apellido} - #{matricula.nombre_especialidad}
-                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p3sucursal')") Sección Anterior
-                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p5final')") Siguiente Sección
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p3sucursal')" style="position: absolute; bottom: 310px; right: 1080px;") Sección Anterior
+                button.btn.btn-primary(type="button" onclick="siguienteSeccion(this, 'p5final')" style="position: absolute; bottom: 310px; right: 130px;") Siguiente Sección
             #p5final.d-none
                 .mb-3
                     label(for="intervalo_turno").form-label Intervalo de Turno
-                    input#intervalo_turno.form-control(name="intervalo_turno" required step="600")
+                    input#intervalo_turno.form-control(style="width: 1080x;",name="intervalo_turno" required step="600")
                 .mb-3
                     label(for="max_sobreTurno").form-label Máximo Sobreturno
-                    input#max_sobreTurno.form-control(type="number" name="max_sobreTurno" min="0" required)
+                    input#max_sobreTurno.form-control(style="width: 1080x;",type="number" name="max_sobreTurno" min="0" required)
                 .mb-3
                     label(for="estado_agenda").form-label Estado de Agenda
-                    select#estado_agenda.form-select(name="estado_agenda" required)
+                    select#estado_agenda.form-select(style="width: 1080x;",name="estado_agenda" required)
                         option(value=1 selected) Activo
                         option(value=0) Inactivo
                 .mb-3
                     label(for="id_clasificacion").form-label Clasificación
-                    select#id_clasificacion.form-select(name="id_clasificacion" required)
+                    select#id_clasificacion.form-select(style="width: 1080x;",name="id_clasificacion" required)
                         each clasificacion in clasificaciones
                             option(value=clasificacion.id_clasificacion) #{clasificacion.nombre_clasificacion}
                 .mb-3
                     label(for="descripcion").form-label Descripción
-                    textarea#descripcion.form-control(name="descripcion" rows="3" maxlength="100" required)
-                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p4matricula')") Sección Anterior
-                button.btn.btn-success(type="button" onclick="manejarAgenda()") Crear Agenda
+                    textarea#descripcion.form-control(style="width: 1080x;",name="descripcion" rows="3" maxlength="100" required)
+                button.btn.btn-secondary(type="button" onclick="siguienteSeccion(this, 'p4matricula')" style="position: absolute; bottom: 310px; right: 1080px;") Sección Anterior
+                button.btn.btn-success(type="button" onclick="manejarAgenda()" style="position: absolute; bottom: 310px; right: 130px;") Crear Agenda
     br
     br
     .container
@@ -73,7 +73,7 @@ block content
                 form.allforms(action="/agendas/buscar" method="POST" class="needs-validation" novalidate)
                     .mb-3
                         label(for="agenda" class="form-label") Seleccione una Agenda
-                        select#agenda.form-select(name="id_agenda" required)
+                        select#agenda.form-select(style="width: 1040px;",name="id_agenda" required)
                             if agendas && agendas.length > 0
                                 each agenda in agendas
                                     option(value=agenda.id_agenda) #{agenda.nombre} #{agenda.apellido} - #{agenda.nombre_especialidad}

@@ -86,7 +86,7 @@ function cargarCalendario(){
         eventContent: function(info){
             return {
                 html: `
-                <div style="overflow: hidden;margin-top:5px; font-size: 20px; positon: relative;  cursor: pointer; font-family: 'Inter', sans-serif;">
+                <div style="overflow: hidden;margin-top:5px;color: #ffffff;:rgb(0, 0, 0); font-size: 20px; position: relative;  cursor: pointer; font-family: 'Inter', sans-serif;">
                     <!--<div><strong>${info.event.title}</strong></div>
                     <div>Location: ${info.event.extendedProps.location}</div>
                     <div>Date: ${info.event.start.toLocaleDateString(
@@ -132,23 +132,23 @@ function getInfoDelTurno(hora, fecha, turnos) {
     try {
         const horaCompleta = normalizarHora(hora)
         for (let i = 0; i < turnos.length; i++) {
-        const turno = turnos[i];
-        const fechaTurno = new Date(turno.fecha);
-        if (
-            turno.inicio_turno === horaCompleta &&
-            fechaTurno.getDate() === fecha.getDate() &&
-            fechaTurno.getMonth() === fecha.getMonth() &&
-            fechaTurno.getFullYear() === fecha.getFullYear()
-        ) {
-            return {
-                clase: getClaseEstado(turno.id_estado_turno),
-                id_turno: turno.id_turno
-            };
-        }
+            const turno = turnos[i];
+            const fechaTurno = new Date(turno.fecha);
+            if (
+                turno.inicio_turno === horaCompleta &&
+                fechaTurno.getDate() === fecha.getDate() &&
+                fechaTurno.getMonth() === fecha.getMonth() &&
+                fechaTurno.getFullYear() === fecha.getFullYear()
+            ) {
+                return {
+                    clase: getClaseEstado(turno.id_estado_turno),
+                    id_turno: turno.id_turno
+                };
+            }
         }
         return {
-        clase: 'text-primary',
-        id_turno: null
+            clase: 'libre',
+            id_turno: null
         };
     } catch (error) {
         console.log(error)
@@ -162,9 +162,13 @@ function normalizarHora(h) {
 
 function getClaseEstado(id_estado_turno) {
     switch (id_estado_turno) {
-        case 2: return 'text-secondary';
-        case 3: return 'text-success';
-        case 4: return 'text-danger';
-        default: return 'text-primary';
+        case 2: return 'reservado';
+        case 3: return 'confirmado';
+        case 4: return 'cancelado';
+        case 5: return 'ausente'
+        case 6: return 'presente';
+        case 7: return 'en-consulta';
+        case 8: return 'atendido';
+        default: return 'libre';
     }
 }
