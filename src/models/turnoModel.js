@@ -49,29 +49,16 @@ export const darTurno = async(id_turno, dni, motivo)=>{
     }
 }
 
-export const confirmar = async(id_turno)=>{
+export const estadoTurno = async(id_turno, estado)=>{
     try {
         const consulta = `
-            UPDATE turno SET id_estado_turno=3
-            WHERE turno.id_turno=?
+            UPDATE turno SET id_estado_turno = ?
+            WHERE turno.id_turno = ?
         `
-        const [resultado] = await connection.execute(consulta,[id_turno])
+        const [resultado] = await connection.execute(consulta,[estado,id_turno])
         return resultado
     } catch (error) {
-        console.error("Error confirmar", error)
-    }
-}
-
-export const cancelar = async(id_turno)=>{
-    try {
-        const consulta = `
-            UPDATE turno SET id_estado_turno=4
-            WHERE turno.id_turno=?
-        `
-        const [resultado] = await connection.execute(consulta,[id_turno])
-        return resultado
-    } catch (error) {
-        console.error("Error cancelar", error)
+        console.error("Error estadoTurno", error)
     }
 }
 
@@ -90,7 +77,7 @@ export const insertTurno = async(inicio_turno,fin_turno,motivo_consulta, dni,id_
 export const selecTurno = async(id_turno)=>{
     try {
         const consulta = `
-            SELECT inicio_turno, fin_turno, id_estado_turno, motivo_consulta, dni, id_agenda, fecha, sobreturno 
+            SELECT id_turno, inicio_turno, fin_turno, id_estado_turno, motivo_consulta, dni, id_agenda, fecha, sobreturno 
             FROM turno 
             WHERE turno.id_turno = ?
         `

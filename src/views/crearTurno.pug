@@ -5,29 +5,33 @@ block content
         case turno.id_estado_turno
             when 2
                 h3 Reservado
-                button#btnConfirmar.btn.confirmado(type="button" onclick="mostrarFormulario()") Confirmar
-                button#btnCancelar.btn.cancelado(type="button" onclick="mostrarFormulario()") Cancelar
+                form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                    button#btnConfirmar.btn.confirmado(type="submit" name="accion" value="confirmar") Confirmar
+                    button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
             when 3
                 h3 Confirmado
-                button#btnCancelar.btn.cancelado(type="button" onclick="mostrarFormulario()") Cancelar
-                button#btnPresente.btn.presente(type="button" onclick="mostrarFormulario()") Presente
-                button#btnAusente.btn.ausente(type="button" onclick="mostrarFormulario()") Ausente
+                form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                    button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
+                    button#btnPresente.btn.presente(type="submit" name="accion" value="presente") Presente
+                    button#btnAusente.btn.ausente(type="submit" name="accion" value="ausente") Ausente
             when 4
                 h3 Cancelado
             when 5
                 h3 Ausente
             when 6
                 h3 Presente
-                button#btnEnConsulta.btn.en-consulta(type="button" onclick="mostrarFormulario()") En Consulta
+                form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                    button#btnEnConsulta.btn.en-consulta(type="submit" name="accion" value="en-consulta") En Consulta
             when 7
                 h3 En consulta
-                button#btnAtendido.btn.atendido(type="button" onclick="mostrarFormulario()") Atendido
+                form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                    button#btnAtendido.btn.atendido(type="submit" name="accion" value="atendido") Atendido
             when 8
                 h3 Atendido
             default 
                 h3 Libre
-                button#btnReservar.btn.reservado(type="button" onclick="mostrarFormulario()") Reservar
-                button#btnSobreturno.btn.sobreturno(type="button" onclick="mostrarFormulario()") Sobre Turno
+                    button#btnReservar.btn.reservado(type="button" onclick="mostrarFormulario()") Reservar
+                    button#btnSobreturno.btn.sobreturno(type="button" onclick="mostrarFormulario()") Sobre Turno
 
     .contenedorForm.d-none#formularioTurno
         form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")

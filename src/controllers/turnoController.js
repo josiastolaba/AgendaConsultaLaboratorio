@@ -1,6 +1,6 @@
 import { obtenerTodasLasAgendasPorMatricula, obtenerTodosAgendasActuales } from "../models/agendaModel.js";
 import { obtenerTodosLosPacientes } from "../models/personaModel.js";
-import { selecTurno,darTurno,listarTurnosPorAgenda,confirmar,cancelar,insertTurno,listarTodosTurnosPorAgenda} from "../models/turnoModel.js";
+import { selecTurno,darTurno,listarTurnosPorAgenda,confirmar,cancelar,estadoTurno,insertTurno,listarTodosTurnosPorAgenda} from "../models/turnoModel.js";
 
 export const getTurno = async (req,res)=>{
     try {
@@ -72,25 +72,35 @@ export const updateTurno = async(req,res)=>{
     }
 }
 
-export const updateConfirmar = async(req,res)=>{
+export const updateEstadoTurno = async(req,res)=>{
     try {
-        const {id_turno} = req.body;
-        console.log(req.body);
-        await confirmar(id_turno);
+        const {accion} = req.body;
+        const {id_turno} = req.params;
+        console.log(id_turno)
+        console.log(accion)
+        switch (accion) {
+            case "confirmar":
+                await estadoTurno(id_turno,3);
+                break;
+            case "cancelar":
+                await estadoTurno(id_turno,4);
+                break;
+            case "ausente":
+                await estadoTurno(id_turno,5);
+                break;
+            case "presente":
+                await estadoTurno(id_turno,6);
+                break;
+            case "en-consulta":
+                await estadoTurno(id_turno,7);
+                break;
+            case "atendido":
+                await estadoTurno(id_turno,8);
+                break;    
+        }
         res.redirect("/turno/darturno");
     } catch (error) {
-        console.error("Error updateConfirmar", error);
-    }
-}
-
-export const updateCancelar = async(req,res)=>{
-    try {
-        const {id_turno} = req.body;
-        console.log(req.body);
-        await cancelar(id_turno);
-        res.redirect("/turno/darturno");
-    } catch (error) {
-        console.error("Error updateCancelar", error);
+        console.error("Error updateEstadoTurno", error);
     }
 }
 
