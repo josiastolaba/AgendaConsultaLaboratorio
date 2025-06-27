@@ -65,7 +65,6 @@ const getDiaSelec = ()=>{
     .forEach(checkbox => {
       // Buscamos el <select> asociado usando el valor del checkbox
       const turnoSelect = document.querySelector(`select[name="turno_${checkbox.value}"]`);
-
       diasSeleccionados.push({
         valor: checkbox.value,
         nombre_dia: checkbox.getAttribute('nombre_dia'),
@@ -90,7 +89,6 @@ const cardDias = ()=>{
       ,finTarde: card.querySelector('.finTarde')?.value || null
     })
   })
-  console.log(horarioSelec)
   return horarioSelec
 }
 

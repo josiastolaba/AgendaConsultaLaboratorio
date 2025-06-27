@@ -39,7 +39,6 @@ export const iniciarSesion = async (req,res)=>{
     try {
         const {dni,password} = req.body;
         const user = await buscarUsuario(dni);
-        console.log(req.body);
         if(user){
             const passwordCorrecta = await bcrypt.compare(password, user.password);
             if(!passwordCorrecta){

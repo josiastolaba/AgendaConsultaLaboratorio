@@ -25,7 +25,6 @@ export const formAgenda = async (req,res)=>{
 
 export const guardarAgenda = async(req,res)=>{
     try {
-        console.log(req.body);
         const matriculas = await obtenerTodasLasMatriculas();
         const sucursales = await obtenerTodasLasSucursales();
         const agendas = await obtenerTodosAgendasActuales();
@@ -36,13 +35,10 @@ export const guardarAgenda = async(req,res)=>{
         let [hh, mm] = hora.split(":").map(Number);
         let minutos = (hh * 60) + mm; // 0*60 + 30 = 30
         const id_configuracion = await crearConfigAgenda(minutos,sobreturno);
-        console.log(minutos)
         for (const horario of horarioSelec){
             let id_horario = await insertarHorarioCompleto(horario.inicioManana, horario.finManana, horario.inicioTarde, horario.finTarde);
             await relacionDiaHorario(horario.id_dia,id_horario,id_configuracion);
         };
-        console.log(req.body)
-        
         const resultado = await insertarAgenda(estadoAgenda, idMatricula, idSucursal, descripcion,idClasificacion,id_configuracion);
         //res.render('agenda', {agendaCreada: true, usuario: req.session.usuario,matriculas,sucursales,clasificaciones,agendas,dias})
         res.status(302).redirect('/agendas/crearAgenda');
@@ -73,7 +69,6 @@ export const traerAgenda = async (req,res)=>{
     try {
         const {id_agenda} = req.params;
         const turnos = await listarTurnosPorAgenda(id_agenda);
-        console.log(turnos);
         const agenda = await traerHxAgenda(id_agenda);
         return res.json({agenda,turnos});
     } catch (error) {

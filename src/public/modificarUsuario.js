@@ -26,7 +26,6 @@ function cargarDate(fecha) {
     try {
         const date = new Date(fecha);
         if (isNaN(date.getTime())) throw new Error("Fecha inválida");
-
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear();

@@ -24,6 +24,10 @@ function mostrarFormulario() {
     document.getElementById('formularioTurno').classList.remove('d-none');
 }
 
+function mostrarFormularioSobreTurno() {
+    document.getElementById('formularioSobreTurno').classList.remove('d-none');
+}
+
 const siguienteSeccion = (seccionActual,id_seccion) => {
     seccionActual.parentElement.classList.add("d-none")
     const nextSection = document.getElementById(id_seccion)
@@ -38,7 +42,6 @@ const anteriorSeccion = (seccionActual,id_seccion) => {
 const controlHFinMayorMenorHInicio = ()=>{
     const horaInicioManianaDate = moment(horaInicioManiana.value,"HH:mm")._d
     const horaInicioTardeDate = moment(horaInicioTarde.value,"HH:mm")._d
-    console.log(horaInicioManianaDate,horaInicioTardeDate)
 }
 
 // const controlHFinMayorMenorHInicio = ()=>{
@@ -87,7 +90,6 @@ const turnoTarde = document.getElementById("turnotarde")
 
 const seleccionarTurno = (e)=>{
     const selectedValue = e.target.value
-    console.log(selectedValue)
     switch (selectedValue) {
         case "mañana":
             turnoTarde.classList.add("d-none")

@@ -1,7 +1,6 @@
 const tabla = document.getElementById("turnoTable")
-
 const turnosButton = tabla.querySelectorAll('button.select')
-console.log(tabla,turnosButton)
+
 function seleccionarTurno(htmlElement,id_turno){
     turnosButton.forEach(button=>{
         button.innerHTML= "Seleccionar"

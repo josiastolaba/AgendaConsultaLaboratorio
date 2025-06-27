@@ -1,6 +1,6 @@
 import { obtenerTodasLasAgendasPorMatricula, obtenerTodosAgendasActuales } from "../models/agendaModel.js";
 import { obtenerTodosLosPacientes } from "../models/personaModel.js";
-import { selecTurno,darTurno,listarTurnosPorAgenda,confirmar,cancelar,estadoTurno,insertTurno,listarTodosTurnosPorAgenda} from "../models/turnoModel.js";
+import { selecTurno,darTurno,listarTurnosPorAgenda,estadoTurno,insertTurno,listarTodosTurnosPorAgenda,insertSobreTurno} from "../models/turnoModel.js";
 
 export const getTurno = async (req,res)=>{
     try {
@@ -15,7 +15,6 @@ export const getTurno = async (req,res)=>{
 export const getTurno2 = async (req,res)=>{
     try{
         const turnos = await listarTodosTurnosPorAgenda(req.params.id_agenda);
-        console.log(turnos);
         res.json(turnos);
     }catch(error){
         console.log(error);
@@ -38,11 +37,23 @@ export const reservarTurno = async(req,res)=>{
         const hora_inicio = new Date(datosAgenda.hora_inicio);
         const hora_fin = new Date(datosAgenda.hora_fin);
         const fechaJs = new Date(datosAgenda.fecha);
-        console.log(req.body, datosAgenda.hora_inicio);
         await insertTurno(`${hora_inicio.getHours()}:${hora_inicio.getMinutes()}`,`${hora_fin.getHours()}:${hora_fin.getMinutes()}`,motivo,dniPaciente,datosAgenda.id_agenda,fechaJs,false);
         res.redirect("/turno/darturno");
     } catch (error) {
         console.error("Error reservarTurno", error);
+    }
+}
+export const reservarSobreTurno = async(req,res)=>{
+    try {
+        const {dniPaciente,motivo} = req.body;
+        const datosAgenda = req.session.agenda;
+        const hora_inicio = new Date(datosAgenda.hora_inicio);
+        const hora_fin = new Date(datosAgenda.hora_fin);
+        const fechaJs = new Date(datosAgenda.fecha);
+        await insertSobreTurno(`${hora_inicio.getHours()}:${hora_inicio.getMinutes()}`,`${hora_fin.getHours()}:${hora_fin.getMinutes()}`,motivo,dniPaciente,datosAgenda.id_agenda,fechaJs,true);
+        res.redirect("/turno/darturno");
+    } catch (error) {
+        console.error("Error reservarSobreTurno", error);
     }
 }
 
@@ -64,7 +75,6 @@ export const traerTurnos = async (req,res)=>{
 export const updateTurno = async(req,res)=>{
     try {
         const {paciente,motivo,id_turno} = req.body;
-        console.log(req.body);
         await darTurno(id_turno,paciente,motivo);
         res.redirect("/turno/darturno");
     } catch (error) {
@@ -76,8 +86,6 @@ export const updateEstadoTurno = async(req,res)=>{
     try {
         const {accion} = req.body;
         const {id_turno} = req.params;
-        console.log(id_turno)
-        console.log(accion)
         switch (accion) {
             case "confirmar":
                 await estadoTurno(id_turno,3);

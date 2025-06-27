@@ -5,7 +5,6 @@ import { crearEspeMedicoInsert } from "../models/especialidad_medicoModel.js";
 export const getMedico = async (req,res)=>{
     try {
         const usuarios_m = await obtenerTodosLosMedicos();
-        console.log(usuarios_m);
         const especialidades = await obtenerTodasLasEspecialidades();
         res.render('medico',{usuario: req.session.usuario,usuarios_m,especialidades});
     } catch (error) {

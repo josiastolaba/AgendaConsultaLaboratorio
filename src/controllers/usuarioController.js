@@ -16,7 +16,6 @@ export const getUsuario = async (req,res)=>{
 
 export const updateUsuarioYPersona = async (req,res)=>{
     try {
-        console.log(req.body)
         const {dni,nombre,apellido,direccion,fechaNacimiento,email,estado_usuario,rol,id_usuario} = req.body;
         await modificarPersona(dni,nombre,apellido,direccion,fechaNacimiento,email);
         await modificarUsuario(rol,estado_usuario,id_usuario);

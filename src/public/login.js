@@ -3,7 +3,6 @@ async function iniciarSesion(){
     const dni = document.getElementById("dni").value
     const password = document.getElementById("password").value
     const data = {dni,password}
-    console.log(data)
     const response = await fetch("/inicio/autenticar", {method: "POST",
         headers: {"Content-Type":"application/json",},
         body: JSON.stringify(data),
