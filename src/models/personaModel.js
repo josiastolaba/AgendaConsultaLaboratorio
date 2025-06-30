@@ -40,3 +40,4 @@ export const obtenerTodosLosPacientes = async ()=> {
         console.error("Error obtenerTodosLosPacientes",error)
     }
 }
+

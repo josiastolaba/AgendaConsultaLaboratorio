@@ -89,13 +89,53 @@ export const insertSobreTurno = async(inicio_turno,fin_turno,motivo_consulta, dn
 export const selecTurno = async(id_turno)=>{
     try {
         const consulta = `
-            SELECT id_turno, inicio_turno, fin_turno, id_estado_turno, motivo_consulta, dni, id_agenda, fecha, sobreturno 
-            FROM turno 
-            WHERE turno.id_turno = ?
+            SELECT t.*
+            FROM turno t 
+            WHERE t.id_turno = ?
         `
         const [resultado] = await connection.execute(consulta,[id_turno])
         return resultado[0]
     } catch (error) {
         console.error("Error selecTurno", error)
+    }
+}
+
+export const buscarSobreTurno = async(inicio_turno,fecha,id_agenda)=>{
+    try {
+        const consulta = `
+            SELECT * FROM turno t
+            WHERE t.sobreturno = 1 AND t.id_estado_turno NOT IN (4,5,6,7,8) AND t.inicio_turno = ? AND t.fecha = ? AND t.id_agenda = ?
+        `
+        const [resultado] = await connection.execute(consulta,[inicio_turno,fecha,id_agenda])
+        return resultado[0]
+    } catch (error) {
+        console.error("Error buscarSobreTurno", error)
+    }
+}
+
+export const buscarTurnoPorHorario = async(agenda,inicio_turno,fecha)=>{
+    try {
+        const consulta = `
+            SELECT t.* 
+            FROM turno t 
+            WHERE t.id_agenda = ? AND t.inicio_turno = ? AND t.fecha = ? AND t.sobreturno != 1
+        `
+        const [resultado] = await connection.execute(consulta,[agenda,inicio_turno,fecha])
+        return resultado[0]
+    } catch (error) {
+        console.error("Error buscarTurnoPorHorario", error)
+    }
+}
+
+export const pasarSobreATurno = async(id_turno)=>{
+    try {
+        const consulta = `
+            UPDATE turno SET sobreturno = 0
+            WHERE id_turno = ?
+        `
+        const [resultado] = await connection.execute(consulta,[id_turno])
+        return resultado[0]
+    } catch (error) {
+        console.error("Error pasarSobreATurno", error)
     }
 }

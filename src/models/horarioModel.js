@@ -156,7 +156,8 @@ export const  traerHxAgenda = async (id_agenda) =>{
             FROM agenda a 
             JOIN configuracion_agenda ca ON ca.id_configuracion = a.id_configuracion 
             JOIN dia_horario dh ON dh.id_configuracion = ca.id_configuracion 
-            JOIN horario h ON h.id_horario = dh.id_horario WHERE a.id_agenda = ?;
+            JOIN horario h ON h.id_horario = dh.id_horario 
+            WHERE a.id_agenda = ?;
         `
         const [resultado] = await connection.execute(consulta,[id_agenda])
         return resultado

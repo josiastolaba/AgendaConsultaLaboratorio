@@ -1,7 +1,8 @@
-import { obtenerTodasLasAgendasPorMatricula, obtenerTodosAgendasActuales } from "../models/agendaModel.js";
+import { obtenerTodasLasAgendasPorId, obtenerTodosAgendasActuales } from "../models/agendaModel.js";
 import { obtenerTodosLosPacientes } from "../models/personaModel.js";
-import { selecTurno,darTurno,listarTurnosPorAgenda,estadoTurno,insertTurno,listarTodosTurnosPorAgenda,insertSobreTurno} from "../models/turnoModel.js";
-
+import { pasarSobreATurno,buscarTurnoPorHorario,selecTurno,darTurno,listarTurnosPorAgenda,estadoTurno,insertTurno,listarTodosTurnosPorAgenda,insertSobreTurno,buscarSobreTurno} from "../models/turnoModel.js";
+import { traerConfigAgendaPorId } from "../models/configuracion_agendaModel.js"
+import { traerHxAgenda } from "../models/horarioModel.js";
 export const getTurno = async (req,res)=>{
     try {
         const agendas = await obtenerTodosAgendasActuales();
@@ -92,12 +93,15 @@ export const updateEstadoTurno = async(req,res)=>{
                 break;
             case "cancelar":
                 await estadoTurno(id_turno,4);
+                await tomarSobreturnoATurno(id_turno);
                 break;
             case "ausente":
                 await estadoTurno(id_turno,5);
+                await trasladarSobreturno(id_turno);
                 break;
             case "presente":
                 await estadoTurno(id_turno,6);
+                await trasladarSobreturno(id_turno);
                 break;
             case "en-consulta":
                 await estadoTurno(id_turno,7);
@@ -133,4 +137,60 @@ export const llevarTurno =  async (req, res) => {
         console.error("Error llevarTurno", error);
     }
 }
+
+const trasladarSobreturno = async (id_turno) => {
+    try {
+        const turno = await selecTurno(id_turno);
+        const sobreturno = await buscarSobreTurno(turno.inicio_turno, turno.fecha, turno.id_agenda);
+        if(sobreturno){
+            const agenda = await obtenerTodasLasAgendasPorId(turno.id_agenda);
+            const configuracion = await traerConfigAgendaPorId(agenda[0].id_configuracion);
+            const intervalo = configuracion[0].intervalo_turno;
+            const horarios = await traerHxAgenda(turno.id_agenda);
+            let encontrado = false;
+            const [horasI,minutosI] = sobreturno.inicio_turno.split(":").map(Number)
+            const [horasF,minutosF] = sobreturno.fin_turno.split(":").map(Number)
+            const hora_inicio = new Date(sobreturno.fecha) 
+            const hora_fin = new Date(sobreturno.fecha)
+            hora_inicio.setHours(horasI,minutosI,0,0);
+            hora_fin.setHours(horasF,minutosF,0,0);
+                while (encontrado != true ) {
+                    hora_inicio.setMinutes(hora_inicio.getMinutes() + intervalo);
+                    hora_fin.setMinutes(hora_fin.getMinutes() + intervalo);
+                    const turnoEncontrado = await buscarTurnoPorHorario(agenda[0].id_agenda,`${hora_inicio.getHours()}:${hora_inicio.getMinutes()}`, sobreturno.fecha)
+                    console.log(turnoEncontrado);
+                    if(turnoEncontrado){
+                        const sobreturnoEncontrado = await buscarSobreTurno(turnoEncontrado.inicio_turno, turnoEncontrado.fecha, turnoEncontrado.id_agenda);
+                        if(!sobreturnoEncontrado){
+                            encontrado = true;
+                            await insertTurno(turnoEncontrado.inicio_turno,turnoEncontrado.fin_turno,sobreturno.motivo_consulta,sobreturno.dni,sobreturno.id_agenda,turnoEncontrado.fecha,true);
+                        }
+                    }else{
+                        encontrado = true;
+                        console.log(hora_inicio)
+                        await insertTurno(`${hora_inicio.getHours()}:${hora_inicio.getMinutes()}`,`${hora_fin.getHours()}:${hora_fin.getMinutes()}`,sobreturno.motivo_consulta,sobreturno.dni,sobreturno.id_agenda,hora_inicio,false);
+                    }
+                    await estadoTurno(sobreturno.id_turno, 4);
+                }
+        }else{
+            
+        }
+    } catch (error) {
+        console.error("Error trasladarSobreturno", error);
+    }
+} 
+
+const tomarSobreturnoATurno = async (id_turno) => {
+    try {
+        const turno = await selecTurno(id_turno);
+        const sobreturno = await buscarSobreTurno(turno.inicio_turno, turno.fecha, turno.id_agenda);
+        if(sobreturno){
+            await pasarSobreATurno(sobreturno.id_turno);
+        }
+    } catch (error) {
+        console.error("Error tomarSobreturnoATurno", error);
+    }
+}
+
+
 

@@ -4,6 +4,7 @@ function cargarCalendario(){
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
+        eventOrder: "timeStart",
         events:function(info, successCallback, failureCallback){
             fetch("http://localhost:3000/agendas/getAgenda/" + document.getElementById("agenda").value)
                 .then(function(response){
@@ -32,17 +33,32 @@ function cargarCalendario(){
                                     while(horaInicioM < horaFinM){
                                         horafinturnoM.setHours(horaInicioM.getHours(),horaInicioM.getMinutes(),0,0)
                                         horafinturnoM.setMinutes(horafinturnoM.getMinutes() + Number(event.intervalo_turno))
-                                        const infoTurno = getInfoDelTurno(horaInicioM.getHours()+":"+horaInicioM.getMinutes().toString().padStart(2, '0')+":00", fechaActual, data.turnos)
-                                        eventos.push({
-                                            classNames: [infoTurno.clase],
-                                            title: ".",
-                                            start: new Date(fechaActual),
-                                            end: new Date(fechaActual),
-                                            url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horafinturnoM}&fecha=${fechaActual.toString()}${infoTurno.id_turno ? `&id_turno=${infoTurno.id_turno}` : ""}`,
-                                            location: event.eventLocation || "",
-                                            timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes().toString().padStart(2, '0'),
-                                            timeEnd: horafinturnoM.getHours()+":"+horafinturnoM.getMinutes().toString().padStart(2, '0'),
-                                        })
+                                        const turnosEncontrados = getInfoDelTurno(horaInicioM.getHours()+":"+horaInicioM.getMinutes().toString().padStart(2, '0')+":00", fechaActual, data.turnos)
+                                        if(turnosEncontrados.length != 0){
+                                            turnosEncontrados.forEach(turno => {
+                                                eventos.push({
+                                                    classNames: [turno.clase],
+                                                    title: turno.sobreturno ? "Sobreturno" : [turno.title],
+                                                    start: new Date(fechaActual),
+                                                    end: new Date(fechaActual),
+                                                    url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horafinturnoM}&fecha=${fechaActual.toString()}${turno.id_turno ? `&id_turno=${turno.id_turno}` : ""}`,
+                                                    location: event.eventLocation || "",
+                                                    timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes().toString().padStart(2, '0'),
+                                                    timeEnd: horafinturnoM.getHours()+":"+horafinturnoM.getMinutes().toString().padStart(2, '0'),
+                                                })
+                                            })
+                                        }else{
+                                            eventos.push({
+                                                classNames: ['libre'],
+                                                title: "Libre",
+                                                start: new Date(fechaActual),
+                                                end: new Date(fechaActual),
+                                                url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioM}&hora_fin=${horafinturnoM}&fecha=${fechaActual.toString()}${turnosEncontrados.id_turno ? `&id_turno=${turnosEncontrados.id_turno}` : ""}`,
+                                                location: event.eventLocation || "",
+                                                timeStart: horaInicioM.getHours()+":"+horaInicioM.getMinutes().toString().padStart(2, '0'),
+                                                timeEnd: horafinturnoM.getHours()+":"+horafinturnoM.getMinutes().toString().padStart(2, '0'),
+                                            })
+                                        }
                                         horaInicioM.setMinutes(horaInicioM.getMinutes() + Number(event.intervalo_turno))
                                     }
                                 }
@@ -55,20 +71,34 @@ function cargarCalendario(){
                                     horaFinT.setHours(horasFT,minutosFT,0,0)
                                     let horafinturnoT = new Date()
                                     while(horaInicioT < horaFinT){
-                                        
                                         horafinturnoT.setHours(horaInicioT.getHours(),horaInicioT.getMinutes(),0,0)
                                         horafinturnoT.setMinutes(horafinturnoT.getMinutes() + Number(event.intervalo_turno))
-                                        const infoTurno = getInfoDelTurno(horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0')+":00", fechaActual, data.turnos)
-                                        eventos.push({
-                                            classNames: [infoTurno.clase],
-                                            title: ".",
-                                            start: new Date(fechaActual),
-                                            end: new Date(fechaActual),
-                                            url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual.toString()}${infoTurno.id_turno ? `&id_turno=${infoTurno.id_turno}` : ""}`,
-                                            location: event.eventLocation || "",
-                                            timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0'),
-                                            timeEnd: horafinturnoT.getHours()+":"+horafinturnoT.getMinutes().toString().padStart(2, '0'),
-                                        })
+                                        const turnosEncontrados = getInfoDelTurno(horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0')+":00", fechaActual, data.turnos)
+                                        if(turnosEncontrados.length != 0){
+                                            turnosEncontrados.forEach(turno => {
+                                                eventos.push({
+                                                    classNames: [turno.clase],
+                                                    title: turno.sobreturno ? "Sobreturno" : [turno.title],
+                                                    start: new Date(fechaActual),
+                                                    end: new Date(fechaActual),
+                                                    url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual.toString()}${turno.id_turno ? `&id_turno=${turno.id_turno}` : ""}`,
+                                                    location: event.eventLocation || "",
+                                                    timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0'),
+                                                    timeEnd: horafinturnoT.getHours()+":"+horafinturnoT.getMinutes().toString().padStart(2, '0'),
+                                                })
+                                            })
+                                        }else{
+                                            eventos.push({
+                                                classNames: ['libre'],
+                                                title: "Libre",
+                                                start: new Date(fechaActual),
+                                                end: new Date(fechaActual),
+                                                url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual.toString()}${turnosEncontrados.id_turno ? `&id_turno=${turnosEncontrados.id_turno}` : ""}`,
+                                                location: event.eventLocation || "",
+                                                timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0'),
+                                                timeEnd: horafinturnoT.getHours()+":"+horafinturnoT.getMinutes().toString().padStart(2, '0'),
+                                            })
+                                        }  
                                         horaInicioT.setMinutes(horaInicioT.getMinutes() + Number(event.intervalo_turno))
                                     }
                                 }
@@ -97,6 +127,7 @@ function cargarCalendario(){
                             year: "numeric",
                         }
                     )}</div>-->
+                    <div>${info.event.title}</div>
                     <div> ${info.event.extendedProps.timeStart} - ${info.event.extendedProps.timeEnd}</div>
                 </div>
                 `
@@ -106,7 +137,6 @@ function cargarCalendario(){
         eventMouseEnter: function(mouseEnterInfo){
             let el = mouseEnterInfo.el
             el.classList.add("relative")
-
             let newEl = document.createElement("div")
             let newElTitle = mouseEnterInfo.event.title
             let newElLocation = mouseEnterInfo.event.extendedProps.location
@@ -130,6 +160,8 @@ function cargarCalendario(){
 }
 function getInfoDelTurno(hora, fecha, turnos) {
     try {
+        console.log("getInfoDelTurno")
+        const TurEncontrados = [];
         const horaCompleta = normalizarHora(hora)
         for (let i = 0; i < turnos.length; i++) {
             const turno = turnos[i];
@@ -140,16 +172,15 @@ function getInfoDelTurno(hora, fecha, turnos) {
                 fechaTurno.getMonth() === fecha.getMonth() &&
                 fechaTurno.getFullYear() === fecha.getFullYear()
             ) {
-                return {
+                TurEncontrados.push({
                     clase: getClaseEstado(turno.id_estado_turno),
-                    id_turno: turno.id_turno
-                };
+                    id_turno: turno.id_turno,
+                    title: getClaseTitulo(turno.id_estado_turno),
+                    sobreturno: turno.sobreturno || false
+                });
             }
         }
-        return {
-            clase: 'libre',
-            id_turno: null
-        };
+        return TurEncontrados
     } catch (error) {
         console.log(error)
     }
@@ -170,5 +201,18 @@ function getClaseEstado(id_estado_turno) {
         case 7: return 'en-consulta';
         case 8: return 'atendido';
         default: return 'libre';
+    }
+}
+
+function getClaseTitulo(id_estado_turno) {
+    switch (id_estado_turno) {
+        case 2: return "Reservado";
+        case 3: return "Confirmado";
+        case 4: return "Cancelado";
+        case 5: return "Ausente";
+        case 6: return "Presente";
+        case 7: return "En consulta";
+        case 8: return "Atendido";
+        default: return "Libre";
     }
 }

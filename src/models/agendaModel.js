@@ -60,6 +60,20 @@ export const obtenerTodosAgendasActuales = async () =>{
     }
 }
 
+export const obtenerTodasLasAgendasPorId = async (id_agenda)=> {
+    try {
+        const consulta = `
+            SELECT a.* 
+            FROM agenda a
+            WHERE a.id_agenda = ?
+        `
+        const [resultado] = await connection.execute(consulta,[id_agenda])
+        return resultado
+    } catch (error) {
+        console.error("Error obtenerTodasLasAgendasPorId")
+    }
+}
+
 
 
 

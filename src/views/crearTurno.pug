@@ -4,16 +4,12 @@ block content
     .contenedorBotones.mb-3#botones
         case turno.id_estado_turno
             when 2 
-                if(turno.sobreturno)
-                    h3 Sobre Turno
-                    button#btnConfirmar.btn.confirmado(type="submit" name="accion" value="confirmar") Confirmar Sobre Turno
-                    button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar Sobre Turno
-                else
-                    h3 Reservado
-                    button#btnSobreturno.btn.sobreturno(type="button" onclick="mostrarFormularioSobreTurno()") Sobre Turno
-                    form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
-                        button#btnConfirmar.btn.confirmado(type="submit" name="accion" value="confirmar") Confirmar
-                        button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
+                h3 Reservado
+                unless turno.sobreturno
+                    button#btnSobreturno.btn.sobreturno(type="button" onclick="mostrarFormularioSobreTurno()") SobreTurno
+                form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                    button#btnConfirmar.btn.confirmado(type="submit" name="accion" value="confirmar") Confirmar
+                    button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
             when 3
                 h3 Confirmado
                 form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
@@ -36,25 +32,26 @@ block content
                 h3 Atendido
             default 
                 h3 Libre
-                    button#btnReservar.btn.reservado(type="button" onclick="mostrarFormulario()") Reservar
+                .contenedorForm#formularioTurno
+                    form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
+                        .mb-3
+                            label(for="motivo" class="form-label") Motivo
+                            textarea#motivo.form-control(name="motivo" placeholder="Ingrese el motivo" rows="3" required)
+                            .invalid-feedback El motivo es obligatorio.
+                        .mb-3
+                            label(for="paciente" class="form-label") Seleccionar Paciente
+                            input#paciente.form-select(list="pacientes" name="dniPaciente" required)
+                            .invalid-feedback El paciente es obligatorio
+                            datalist#pacientes
+                                each paciente in pacientes
+                                    option(value=paciente.dni) #{paciente.nombre} #{paciente.apellido}
+                            .invalid-feedback Es obligatorio seleccionar un paciente.
+                        input#id_turno(name="id_turno" type="hidden" value="")
+                        input#estado_turno(type="hidden" name="estado_turno" value="")
+                        button.btn.btn-primary(type="submit") Guardar
 
-    .contenedorForm.d-none#formularioTurno
-        form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
-            .mb-3
-                label(for="motivo" class="form-label") Motivo
-                textarea#motivo.form-control(name="motivo" placeholder="Ingrese el motivo" rows="3" required)
-                .invalid-feedback El motivo es obligatorio.
-            .mb-3
-                label(for="paciente" class="form-label") Seleccionar Paciente
-                input#paciente.form-select(list="pacientes" name="dniPaciente" required)
-                .invalid-feedback El paciente es obligatorio
-                datalist#pacientes
-                    each paciente in pacientes
-                        option(value=paciente.dni) #{paciente.nombre} #{paciente.apellido}
-                .invalid-feedback Es obligatorio seleccionar un paciente.
-            input#id_turno(name="id_turno" type="hidden" value="")
-            input#estado_turno(type="hidden" name="estado_turno" value="")
-            button.btn.btn-primary(type="submit") Guardar
+    
+
 
     .contenedorForm.d-none#formularioSobreTurno
         form.allforms.m-3(action="/turno/tomarsobreturno" method="POST" class="needs-validation")

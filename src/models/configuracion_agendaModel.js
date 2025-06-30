@@ -18,11 +18,13 @@ export const crearConfigAgenda = async (intervalo_turno, max_sobreturno) => {
 export const traerConfigAgendaPorId = async (id_configuracion) =>{
     try{
         const consulta = 
-        `SELECT * FROM configuracion_agenda`
+        `SELECT * 
+        FROM configuracion_agenda
+        WHERE id_configuracion= ?`
         const [resultado] = await connection.execute(consulta,[id_configuracion])
           return resultado
     }catch (error) {
-        console.error("Error al traer la configuracion de la agenda", error)
+        console.error("Error traerConfigAgendaPorId", error)
     }
 }
 
