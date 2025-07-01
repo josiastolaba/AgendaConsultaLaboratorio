@@ -41,3 +41,18 @@ export const obtenerTodosLosPacientes = async ()=> {
     }
 }
 
+export const obtenerPacientePorDNI = async (dni)=> {
+    try {
+        const consulta = `
+            SELECT u.*, p.* 
+            FROM usuario u 
+            JOIN persona p ON u.dni = p.dni
+            WHERE u.dni = ?
+        `
+        const [resultado] = await connection.execute(consulta,[dni])
+        return resultado[0]
+    } catch (error) {
+        console.error("Error obtenerPacientePorDNI",error)
+    }
+}
+

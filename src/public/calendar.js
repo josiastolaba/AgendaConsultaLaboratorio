@@ -93,7 +93,7 @@ function cargarCalendario(){
                                                 title: "Libre",
                                                 start: new Date(fechaActual),
                                                 end: new Date(fechaActual),
-                                                url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual.toString()}${turnosEncontrados.id_turno ? `&id_turno=${turnosEncontrados.id_turno}` : ""}`,
+                                                url: `/turno/turnoSeleccionado?id_agenda=${event.id_agenda}&hora_inicio=${horaInicioT}&hora_fin=${horafinturnoT}&fecha=${fechaActual.toString()}${turnosEncontrados.id_turno ? `&id_turno=${turnosEncontrados.id_turno}` : ""}${turnosEncontrados.dni ? `&dni=${turnosEncontrados.dni}` : ""}`,
                                                 location: event.eventLocation || "",
                                                 timeStart: horaInicioT.getHours()+":"+horaInicioT.getMinutes().toString().padStart(2, '0'),
                                                 timeEnd: horafinturnoT.getHours()+":"+horafinturnoT.getMinutes().toString().padStart(2, '0'),

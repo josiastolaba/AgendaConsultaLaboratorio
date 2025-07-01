@@ -1,37 +1,53 @@
 extends layout
 
 block content
-    .contenedorBotones.mb-3#botones
+    .contenedorBotones.mb-3#botones.bg-dark.p-4.rounded.shadow.w-75.mx-auto
         case turno.id_estado_turno
-            when 2 
-                h3 Reservado
+            when 2  
+                h2 Paciente 
+                h3 Nombre: #{paciente.nombre} #{paciente.apellido} DNI: #{paciente.dni}
+                h3.text-info Reservado
+                form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                    button#btnConfirmar.btn.confirmado.text-white(type="submit" name="accion" value="confirmar") Confirmar
+                    button#btnCancelar.btn.cancelado.text-white(type="submit" name="accion" value="cancelar") Cancelar
+                br
                 unless turno.sobreturno
-                    button#btnSobreturno.btn.sobreturno(type="button" onclick="mostrarFormularioSobreTurno()") SobreTurno
-                form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
-                    button#btnConfirmar.btn.confirmado(type="submit" name="accion" value="confirmar") Confirmar
-                    button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
+                h5 Para agendar un sobreturno
+                    button#btnSobreturno.btn.sobreturno.text-white(type="button" onclick="mostrarFormularioSobreTurno()") SobreTurno
             when 3
-                h3 Confirmado
+                h2 Paciente 
+                h3 Nombre: #{paciente.nombre} #{paciente.apellido} DNI: #{paciente.dni}
+                h3.text-info Confirmado
                 form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
-                    button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
-                    button#btnPresente.btn.presente(type="submit" name="accion" value="presente") Presente
-                    button#btnAusente.btn.ausente(type="submit" name="accion" value="ausente") Ausente
+                    button#btnCancelar.btn.cancelado.text-white(type="submit" name="accion" value="cancelar") Cancelar
+                    button#btnPresente.btn.presente.text-white(type="submit" name="accion" value="presente") Presente
+                    button#btnAusente.btn.ausente.text-white(type="submit" name="accion" value="ausente") Ausente
             when 4
-                h3 Cancelado
+                h2 Paciente 
+                h3 Nombre: #{paciente.nombre} #{paciente.apellido} DNI: #{paciente.dni}
+                h3.text-info Cancelado
             when 5
-                h3 Ausente
+                h2 Paciente 
+                h3 Nombre: #{paciente.nombre} #{paciente.apellido} DNI: #{paciente.dni}
+                h3.text-info Ausente
             when 6
-                h3 Presente
+                h2 Paciente
+                h3 Nombre: #{paciente.nombre} #{paciente.apellido} DNI: #{paciente.dni}
+                h3.text-info Presente
                 form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
-                    button#btnEnConsulta.btn.en-consulta(type="submit" name="accion" value="en-consulta") En Consulta
+                    button#btnEnConsulta.btn.en-consulta.text-white(type="submit" name="accion" value="en-consulta") En Consulta
             when 7
-                h3 En consulta
+                h2 Paciente 
+                h3 Nombre: #{paciente.nombre} #{paciente.apellido} DNI: #{paciente.dni}
+                h3.text-info En consulta
                 form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
-                    button#btnAtendido.btn.atendido(type="submit" name="accion" value="atendido") Atendido
+                    button#btnAtendido.btn.atendido.text-white(type="submit" name="accion" value="atendido") Atendido
             when 8
-                h3 Atendido
+                h2 Paciente
+                h3 Nombre: #{paciente.nombre} #{paciente.apellido} DNI: #{paciente.dni}
+                h3.text-info Atendido
             default 
-                h3 Libre
+                h3.text-info Libre
                 .contenedorForm#formularioTurno
                     form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
                         .mb-3
@@ -72,3 +88,60 @@ block content
             button.btn.btn-primary(type="submit") Guardar
 
     script(src="/validaciones.js")
+
+    //.contenedorBotones.mb-3#botones
+        .card.shadow-sm.mb-3(style="padding: 20px; border-radius: 15px;")
+            .card-body
+                case turno.id_estado_turno
+                    when 2 
+                        h4.card-title Paciente: #{paciente.dni} - #{paciente.nombre} #{paciente.apellido}
+                        h5.text-info Reservado
+                        unless turno.sobreturno
+                            button#btnSobreturno.btn.sobreturno.mb-2(type="button" onclick="mostrarFormularioSobreTurno()") SobreTurno
+                        form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                            button#btnConfirmar.btn.confirmado(type="submit" name="accion" value="confirmar") Confirmar
+                            button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
+                    when 3
+                        h4.card-title Paciente: #{paciente.dni} - #{paciente.nombre} #{paciente.apellido}
+                        h5.text-info Confirmado
+                        form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                            button#btnCancelar.btn.cancelado(type="submit" name="accion" value="cancelar") Cancelar
+                            button#btnPresente.btn.presente(type="submit" name="accion" value="presente") Presente
+                            button#btnAusente.btn.ausente(type="submit" name="accion" value="ausente") Ausente
+                    when 4
+                        h4.card-title Paciente: #{paciente.dni} - #{paciente.nombre} #{paciente.apellido}
+                        h5.text-info Cancelado
+                    when 5
+                        h4.card-title Paciente: #{paciente.dni} - #{paciente.nombre} #{paciente.apellido}
+                        h5.text-info Ausente
+                    when 6
+                        h4.card-title Paciente: #{paciente.dni} - #{paciente.nombre} #{paciente.apellido}
+                        h5.text-info Presente
+                        form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                            button#btnEnConsulta.btn.en-consulta(type="submit" name="accion" value="en-consulta") En Consulta
+                    when 7
+                        h4.card-title Paciente: #{paciente.dni} - #{paciente.nombre} #{paciente.apellido}
+                        h5.text-info En consulta
+                        form(action=`/turno/updateEstado/${turno.id_turno}` method="POST")
+                            button#btnAtendido.btn.atendido(type="submit" name="accion" value="atendido") Atendido
+                    when 8
+                        h4.card-title Paciente: #{paciente.dni} - #{paciente.nombre} #{paciente.apellido}
+                        h5.text-info Atendido
+                    default 
+                        h5.text-info Libre
+                        .contenedorForm#formularioTurno
+                            form.allforms.m-3(action="/turno/tomar" method="POST" class="needs-validation")
+                                .mb-3
+                                    label(for="motivo" class="form-label") Motivo
+                                    textarea#motivo.form-control(name="motivo" placeholder="Ingrese el motivo" rows="3" required)
+                                    .invalid-feedback El motivo es obligatorio.
+                                .mb-3
+                                    label(for="paciente" class="form-label") Seleccionar Paciente
+                                    input#paciente.form-select(list="pacientes" name="dniPaciente" required)
+                                    .invalid-feedback El paciente es obligatorio
+                                    datalist#pacientes
+                                        each paciente in pacientes
+                                            option(value=paciente.dni) #{paciente.nombre} #{paciente.apellido}
+                                input#id_turno(name="id_turno" type="hidden" value="")
+                                input#estado_turno(type="hidden" name="estado_turno" value="")
+                                button.btn.btn-primary(type="submit") Guardar

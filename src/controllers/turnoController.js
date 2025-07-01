@@ -1,5 +1,5 @@
 import { obtenerTodasLasAgendasPorId, obtenerTodosAgendasActuales } from "../models/agendaModel.js";
-import { obtenerTodosLosPacientes } from "../models/personaModel.js";
+import { obtenerTodosLosPacientes, obtenerPacientePorDNI } from "../models/personaModel.js";
 import { pasarSobreATurno,buscarTurnoPorHorario,selecTurno,darTurno,listarTurnosPorAgenda,estadoTurno,insertTurno,listarTodosTurnosPorAgenda,insertSobreTurno,buscarSobreTurno} from "../models/turnoModel.js";
 import { traerConfigAgendaPorId } from "../models/configuracion_agendaModel.js"
 import { traerHxAgenda } from "../models/horarioModel.js";
@@ -18,16 +18,17 @@ export const getTurno2 = async (req,res)=>{
         const turnos = await listarTodosTurnosPorAgenda(req.params.id_agenda);
         res.json(turnos);
     }catch(error){
-        console.log(error);
+        console.log("Error getTurno2",error);
     }
 }
 
 export const traerTurno = async (req,res)=>{
     try{
         const turno = await selecTurno(req.params.id_turno);
-        res.json(turno);
+        
+        res.json(turno,paciente);
     }catch(error){
-        console.log(error);
+        console.log("Error traerTurno", error);
     }
 }
 
@@ -97,7 +98,7 @@ export const updateEstadoTurno = async(req,res)=>{
                 break;
             case "ausente":
                 await estadoTurno(id_turno,5);
-                await trasladarSobreturno(id_turno);
+                await tomarSobreturnoATurno(id_turno);
                 break;
             case "presente":
                 await estadoTurno(id_turno,6);
@@ -121,7 +122,9 @@ export const llevarTurno =  async (req, res) => {
         const { id_agenda, hora_inicio, hora_fin, fecha, id_turno} = req.query;
         const pacientes = await obtenerTodosLosPacientes();
         let turno = ""
+        let paciente = "";
         if (id_turno) turno = await selecTurno(id_turno)
+        if (id_turno) paciente = await obtenerPacientePorDNI(turno.dni)
         req.session.agenda={ id_agenda, hora_inicio, hora_fin, fecha };
         req.session.save((error) => {
                 if (error) {
@@ -130,7 +133,7 @@ export const llevarTurno =  async (req, res) => {
                 } else {
                     console.log('Sesión guardada con éxito ', req.session.usuario);
                     console.log(id_agenda, hora_inicio, hora_fin, fecha);
-                    return res.render('crearTurno',{usuario: req.session.usuario,pacientes,turno});
+                    return res.render('crearTurno',{usuario: req.session.usuario,pacientes,turno,paciente});
                 }
         });
     } catch (error) {
